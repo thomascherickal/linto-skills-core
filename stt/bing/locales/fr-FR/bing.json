@@ -1,0 +1,19 @@
+{
+    "bing": {
+        "label": {
+            "name": "Nom",
+            "language": "Langue",
+            "key": "clé",
+            "mode": "Option",
+            "mode_list": {
+                "conversation": "Conversation",
+                "interactive": "Interactif",
+                "dictation": "Dictation"
+            }
+        },
+        "placeholder": {
+            "name": "Nom du noeud",
+            "key": "Clé API"
+        }
+    }
+}

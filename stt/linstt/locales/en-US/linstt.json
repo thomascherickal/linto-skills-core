@@ -1,0 +1,17 @@
+{
+    "linstt": {
+        "label": {
+            "name" : "Name",
+            "url" : "URL",
+            "mode" : "Mode",
+            "mode_list":{
+                "file" : "file",
+                "stream" : "stream"
+            }
+        },
+        "placeholder": {
+            "name" : "Node name",
+            "url" : "http://"
+        }
+    }
+}

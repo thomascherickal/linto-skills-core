@@ -1,0 +1,61 @@
+<script type="text/javascript">
+    RED.nodes.registerType('bing', {
+        category: 'stt',
+        color: '#a6bbcf',
+        defaults: {
+            name: {
+                value: ""
+            },
+            langue: {
+                value: "fr-FR"
+            },
+            key: {
+                value: ""
+            },
+            mode: {
+                value: "conversation"
+            }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "spech-to-text.png",
+        label: function () {
+            return this.name || "bing";
+        },
+        oneditsave: function () {
+            if (!$("#node-input-usetls").is(':checked')) {
+                $("#node-input-tls").val("_ADD_");
+            }
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="bing">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"/> <span data-i18n="bing.label.name" /></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]bing.placeholder.name" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-key"><i class="fa fa-key"></i> <span data-i18n="bing.label.key">Key</span></label>
+        <input type="text" id="node-input-key" data-i18n="[placeholder]bing.placeholder.key" />
+    </div>
+    <div class="form-row"> 
+            <label for="node-input-language"><i class="icon-tag"/><span data-i18n="bing.label.language"/></label>
+            <select id="node-input-language" type="select" >
+                <option value="fr_FR" data-i18n="bing.shared.list_language.fr"/>
+                <option value="en_US" data-i18n="bing.shared.list_language.en"/>
+            </select>
+        </div>
+    <div class="form-row">
+        <label for="node-input-mode"><i class="fa fa-commenting"></i> <span data-i18n="bing.label.mode">Mode</span></label>
+        <select id="node-input-mode" type="select" >
+            <option value="interactive" data-i18n="bing.label.mode_list.interactive"/>
+            <option value="dictation" data-i18n="bing.label.mode_list.dictation"/>
+            <option value="conversation" data-i18n="bing.label.mode_list.conversation"/>
+        </select>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="bing">
+    <p>A STT connector to bing</p>
+</script>

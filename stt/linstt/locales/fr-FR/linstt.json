@@ -1,0 +1,17 @@
+{
+    "linstt": {
+        "label": {
+            "name" : "Nom",
+            "url" : "Adresse",
+            "mode" : "Option",
+            "mode_list":{
+                "file" : "fichier",
+                "stream" : "flot"
+            }
+        },
+        "placeholder": {
+            "name": "Nom du noeud",
+            "url" : "http://"
+        }
+    }
+}

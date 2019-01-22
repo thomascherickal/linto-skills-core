@@ -1,0 +1,25 @@
+{
+    "bing": {
+        "label": {
+            "name": "Name",
+            "language": "Language",
+            "key": "Key",
+            "mode": "Mode",
+            "mode_list": {
+                "conversation": "Conversation",
+                "interactive": "Interactive",
+                "dictation": "Dictation"
+            }
+        },
+        "placeholder": {
+            "name": "Node name",
+            "key": "API Key"
+        },
+        "shared": {
+            "list_language": {
+                "fr": "fr_FR",
+                "en": "en_US"
+            }
+        }
+    }
+}
