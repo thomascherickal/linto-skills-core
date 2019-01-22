@@ -1,0 +1,22 @@
+{
+    "tock": {
+        "label": {
+            "name" : "Nom",
+            "url" : "Adresse",
+            "appname" : "Application"
+        },
+        "placeholder": {
+            "name": "Nom du noeud",
+            "url" : "http://",
+            "appname" : "nom de l'application NLU"
+        },
+        "status": {
+            "connect": "Connecter",
+            "disconnect": "Deconnecter"
+        },
+        "error": {
+            "connect": "Impossible d'appeler l'api TOCK",
+            "config": "Paramètre requis manquant"
+        }
+    }
+}
