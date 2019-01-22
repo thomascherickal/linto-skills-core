@@ -1,0 +1,18 @@
+{
+    "language": {
+        "label": {
+            "name" : "Name",
+            "language" : "Language"
+        },
+        "placeholder": {
+            "name" : "Node name",
+            "default_language" : "en_US"
+        },
+        "shared" :{
+            "list_language" :{
+                "fr" : "fr_FR",
+                "en" : "en_US"
+            }
+        }
+    }
+}

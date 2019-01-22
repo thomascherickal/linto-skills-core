@@ -1,0 +1,12 @@
+{
+    "language": {
+        "label": {
+            "name": "Nom",
+            "language": "Langue"
+        },
+        "placeholder": {
+            "name": "Nom du noeud",
+            "default_language": "fr_FR"
+        }
+    }
+}
