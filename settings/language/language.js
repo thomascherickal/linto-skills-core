@@ -23,7 +23,6 @@ module.exports = function (RED) {
     const shape = "dot";
 
     function selectLanguage(config) {
-        debug(config.language)
         if (config.language === "") return process.env.LANG.split("_")[0];
         else return config.language.split("_")[0];
     }

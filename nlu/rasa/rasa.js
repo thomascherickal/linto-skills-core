@@ -19,7 +19,6 @@
 module.exports = function (RED) {
     const debug = require('debug')('linto-interface:redmanager:flow:nlu:rasa')
     const request = require('request')
-    let node
 
     function prepareRequestRasa(msg, config) {
         let options = {
@@ -51,19 +50,9 @@ module.exports = function (RED) {
                         })
                     }
                     resolve(body)
-                    node.status({
-                        fill: "green",
-                        shape: "dot",
-                        text: RED._("rasa.status.connect")
-                    });
                 });
             } catch (error) {
-                node.status({
-                    fill: "red",
-                    shape: "ring",
-                    text: RED._("rasa.status.disconnect")
-                });
-                node.error(RED._("rasa.error.connect"))
+                reject(error)
             }
         })
     }
@@ -71,7 +60,6 @@ module.exports = function (RED) {
     function wrapperRasa(nluData) {
         let wrapper = {}
         wrapper.intent = nluData.intent.name
-        wrapper.text = nluData.text
         if (nluData.entities.length !== undefined)
             wrapper.entitiesNumber = nluData.entities.length
         wrapper.entities = nluData.entities
@@ -80,7 +68,7 @@ module.exports = function (RED) {
 
     function RasaRequest(config) {
         RED.nodes.createNode(this, config);
-        node = this;
+        let node = this;
         node.on('input', async function (msg) {
             try {
                 if (config.url === '' || config.namespace === '' || config.appname === '') {
@@ -93,11 +81,16 @@ module.exports = function (RED) {
                 } else {
                     let options = prepareRequestRasa(msg, config)
                     let response = await requestRasa(options)
-                    msg.payload = wrapperRasa(response)
+                    msg.payload.intent = wrapperRasa(response)
                     node.send(msg);
                 }
             } catch (err) {
                 node.error(RED._("rasa.error.connect"))
+                node.status({
+                    fill: "red",
+                    shape: "ring",
+                    text: RED._("rasa.status.disconnect")
+                });
             }
         });
     }
