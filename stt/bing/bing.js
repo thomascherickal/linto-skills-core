@@ -59,8 +59,12 @@ module.exports = function (RED) {
         var node = this;
         node.on('input', async function (msg) {
             try {
-                if (Buffer.isBuffer(msg.payload)) {
-                    msg.payload = await prepareDecoding(msg.payload, config)
+                let audioBuffer = Buffer.from(msg.payload.audio, 'base64')
+                delete msg.payload.audio
+                if (Buffer.isBuffer(audioBuffer)) {
+                    let transResult = await prepareDecoding(audioBuffer, config)
+                    msg.payload.transcript = transResult.transcript
+                    msg.payload.confidence = transResult.confidence
                     node.send(msg);
                 }
             } catch (err) {

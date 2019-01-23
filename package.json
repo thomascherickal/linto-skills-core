@@ -1,0 +1,25 @@
+{
+  "name": "node-red-linto-skills",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "node-red": {
+    "nodes": {
+      "tock": "nlu/tock/tock.js",
+      "bing": "stt/bing/bing.js",
+      "linstt": "stt/linstt/linstt.js",
+      "language": "settings/language/language.js",
+      "publish": "settings/publish/publish.js"
+    }
+  },
+  "dependencies": {
+    "debug": "^4.0.1",
+    "ms-bing-speech-service": "^2.0.6",
+    "request": "^2.88.0"
+  }
+}

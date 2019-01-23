@@ -1,0 +1,10 @@
+{
+    "publish": {
+        "label": {
+            "name": "Nom"
+        },
+        "placeholder": {
+            "name": "Nom du noeud"
+        }
+    }
+}

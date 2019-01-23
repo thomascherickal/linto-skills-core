@@ -66,10 +66,20 @@ module.exports = function (RED) {
         var node = this;
         node.on('input', async function (msg) {
             try {
-                let audioBuffer
-                audioBuffer = Buffer.from(msg.payload.audio, 'base64')
+                msg.payload = JSON.parse(msg.payload)
+                if (Object.keys(msg.payload.conversationData).length > 0)
+                    msg.conversationData = msg.payload.conversationData
+            } catch (err) {
+                node.error("Error parsing payload", err);
+            }
+
+            try {
+                let audioBuffer = Buffer.from(msg.payload.audio, 'base64')
+                delete msg.payload.audio
                 if (Buffer.isBuffer(audioBuffer)) {
-                    msg.payload = await prepareDecoding(audioBuffer, config)
+                    let transResult = await prepareDecoding(audioBuffer, config)
+                    msg.payload.transcript = transResult.transcript
+                    msg.payload.confidence = transResult.confidence
                     node.send(msg);
                 }
             } catch (err) {
