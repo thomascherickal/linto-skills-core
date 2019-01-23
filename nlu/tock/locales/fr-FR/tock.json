@@ -12,7 +12,8 @@
         },
         "status": {
             "connect": "Connecter",
-            "disconnect": "Deconnecter"
+            "disconnect": "Deconnecter",
+            "config" : "Configuration nécessaire"
         },
         "error": {
             "connect": "Impossible d'appeler l'api TOCK",

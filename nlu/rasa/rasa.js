@@ -17,10 +17,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 module.exports = function (RED) {
-    const debug = require('debug')('linto-interface:redmanager:flow:nlu:rasa')
+    const debug = require('debug')('redmanager:flow:core:nlu:rasa')
     const request = require('request')
 
-    function prepareRequestRasa(msg, config) {
+    function prepareRequestRasa(msg, config, language) {
         let options = {
             method: 'POST',
             url: config.url,
@@ -32,7 +32,7 @@ module.exports = function (RED) {
                 namespace: config.namespace,
                 applicationName: config.appname,
                 context: {
-                    language: process.env.LANG.split('_')[0]
+                    language
                 }
             },
             json: true
@@ -79,7 +79,7 @@ module.exports = function (RED) {
                         text: RED._("rasa.status.disconnect")
                     });
                 } else {
-                    let options = prepareRequestRasa(msg, config)
+                    let options = prepareRequestRasa(msg, config, this.context().flow.language)
                     let response = await requestRasa(options)
                     msg.payload.intent = wrapperRasa(response)
                     node.send(msg);

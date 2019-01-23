@@ -14,7 +14,7 @@
       "bing": "stt/bing/bing.js",
       "linstt": "stt/linstt/linstt.js",
       "language": "settings/language/language.js",
-      "publish": "settings/publish/publish.js"
+      "prepare": "settings/prepare/prepare.js"
     }
   },
   "dependencies": {

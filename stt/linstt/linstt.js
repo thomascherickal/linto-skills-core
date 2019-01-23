@@ -17,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 module.exports = function (RED) {
-    const debug = require('debug')('linto-interface:redmanager:flow:stt:linstt')
+    const debug = require('debug')('redmanager:flow:core:stt:linstt')
     const request = require('request')
 
     async function decodingAudio(options) {
@@ -65,14 +65,6 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
         var node = this;
         node.on('input', async function (msg) {
-            try {
-                msg.payload = JSON.parse(msg.payload)
-                if (Object.keys(msg.payload.conversationData).length > 0)
-                    msg.conversationData = msg.payload.conversationData
-            } catch (err) {
-                node.error("Error parsing payload", err);
-            }
-
             try {
                 let audioBuffer = Buffer.from(msg.payload.audio, 'base64')
                 delete msg.payload.audio

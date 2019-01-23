@@ -18,7 +18,7 @@
  */
 
 module.exports = function (RED) {
-    const debug = require("debug")("bl-server:logic:config:language");
+    const debug = require("debug")("redmanager:flow:core:settings:language");
     const fill = "blue";
     const shape = "dot";
 

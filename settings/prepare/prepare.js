@@ -18,18 +18,20 @@
  */
 
 module.exports = function (RED) {
-    const debug = require("debug")("bl-server:logic:config:publish:true");
+    const debug = require("debug")("redmanager:flow:core:settings:prepare");
 
-    function PublishMqtt(config) {
+    function prepareFlow(config) {
         RED.nodes.createNode(this, config);
         var node = this;
-        node.on('input', function (msg) {
-            debug('is input')
 
+        if (this.context().flow.language === undefined)
+            this.context().flow.language = process.env.LANG.split('_')[0]
+
+        node.on('input', function (msg) {
             let data = msg.topic.split('/')
             msg.topic = data[0] + "/tolinto/" + data[2] + "/nlp/file/" + data[5]
-            return msg
+            node.send(msg)
         })
     }
-    RED.nodes.registerType("publish", PublishMqtt);
+    RED.nodes.registerType("prepare", prepareFlow);
 };

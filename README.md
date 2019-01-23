@@ -1,12 +1,12 @@
-# Linto-Skills-Core
-Here are setup the crucial Linto skill, without them any Linto process can't be guaranteed to be working the expected way has planning.
+# LinTo-Skills-Core
+Here are crucial LinTo skill, without them a process will possibly can't be guaranteed to work the expected way
 
-## Linto Skills
-Here is the list of node and what they do.
+## LinTo Skills
+Here a brief resume of LinTo core skills by categories
 
 ### STT
-Regroup the STT (Speach To Text) nodes that will allow to transcript what is say to Linto
-Here is the format require in Input / Ouput for allow to this node to work
+Regroup the STT (Speach To Text) nodes that will allow to transcript in text what is say to LinTo
+Here is the format require for Input / Ouput to allow those node to work
 
 **Input**:
 ```
@@ -25,21 +25,21 @@ Here is the format require in Input / Ouput for allow to this node to work
 }
 ```
 ##### LinStt
-The LinStt allow to request the Linagora Spech To Text API
-The node require configuration are :
+The LinStt node allow to request to the Linagora Spech To Text API
+The require node configuration are :
 -  _URL_ : The URL where is located the API
--  _Option_ : Allow to prepare the request for a stream receive or a file
+-  _Option_ : Allow to prepare the request for a `stream` or `file`
 
 ##### Bing
 The Bing node allow to request the [Bing Spech To Text API](https://docs.microsoft.com/en-us/azure/cognitive-services/speech/home)
 The node require configuration are :
--  _Key_ : You'r personal API Key from bing
--  _Language_ : Select the language that you speak to Linto
+-  _Key_ : your subscription key for bing
+-  _Language_ : Select the language that you speak to LinTo
 -  _Mode_ : Select the reconition mode for the transcription
 
 ### NLU
-Regroup all NLU (Natural Language Understanding) node
-Here is the format require in Input / Ouput for allow to this node to work
+Regroup all NLU (Natural Language Understanding) node that will allow to detect which skill to use
+Here is the format require for Input / Ouput to allow those node to work
 
 **Input** :
 ```
@@ -49,6 +49,7 @@ Here is the format require in Input / Ouput for allow to this node to work
     conversationData : { } //optional json from the previous intention if a conversation is require
 }
 ```
+
 **Output**
 ```
 { 
@@ -67,7 +68,7 @@ Here is the format require in Input / Ouput for allow to this node to work
 ```
 
 ##### Tock
-The [Tock](https://voyages-sncf-technologies.github.io/tock/fr/)(The Open Conversation Kit) node allow to prepare, make a request and format the output desired for any Linto skill by using the Tock API
+The [Tock (The Open Conversation Kit)](https://voyages-sncf-technologies.github.io/tock/fr/) node allow to make a request and format the output desired for a skill
 The node require configuration are :
 -  _URL_ : The URL where is located the API
 -  _Application Name_ : The application name created into Tock API to use
@@ -76,9 +77,10 @@ The node require configuration are :
 Regroup the settings nodes that will allow to customize the current flow
 
 ##### Language
-The language skill allow to choose the output language of Linto. The particularity of this node is that he don't get any input / output. He just need to be place in the workflow for working. He is also optional, if he don't choose Linto will select the system default language.
+The language skill allow to choose the output language of LinTo. The particularity of this node is that he don't get any input / output. He just need to be place in the workflow for working. He is also optional, if he don't choose LinTo will select the system default language.
 The node require configuration is :
--  _Language_ : Select the output STT for Linto
+-  _Language_ : Select the output STT for LinTo
 
-##### Publish
-Publish will simply format the TOPIC to publish based on the MQTT Topic Input received.
+##### Prepare
+Prepare will simply format the TOPIC to publish based on the MQTT Topic Input received.
+It also configure specific data for the workflow

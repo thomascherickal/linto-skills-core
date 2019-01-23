@@ -17,7 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 module.exports = function (RED) {
-    const debug = require('debug')('linto-interface:redmanager:flow:stt:bing')
+    const debug = require('debug')('redmanager:flow:core:stt:bing')
     const speechService = require('ms-bing-speech-service')
 
     async function decodingAudio(buffer, recognizer) {

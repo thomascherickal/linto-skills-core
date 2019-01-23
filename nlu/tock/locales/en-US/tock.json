@@ -12,7 +12,8 @@
         },
         "status": {
             "connect": "Connected",
-            "disconnect": "Disconnected"
+            "disconnect": "Disconnected",
+            "config" : "Config require"
         },
         "error": {
             "connect": "Unable to connect to the TOCK API",

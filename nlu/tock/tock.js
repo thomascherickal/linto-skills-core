@@ -17,11 +17,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 module.exports = function (RED) {
-    const debug = require('debug')('linto-interface:redmanager:flow:nlu:tock')
+    const debug = require('debug')('redmanager:flow:core:nlu:tock')
     const request = require('request')
     const NAMESPACE = "app"
 
-    function prepareRequestTock(msg, config) {
+    function prepareRequestTock(msg, config, language) {
         let options = {
             method: 'POST',
             url: config.url,
@@ -33,7 +33,7 @@ module.exports = function (RED) {
                 namespace: NAMESPACE,
                 applicationName: config.appname,
                 context: {
-                    language: process.env.LANG.split('_')[0]
+                    language
                 }
             },
             json: true
@@ -81,12 +81,12 @@ module.exports = function (RED) {
                 if (config.url === '' || config.appname === '') {
                     node.error(RED._("tock.error.config"))
                     node.status({
-                        fill: "red",
+                        fill: "yellow",
                         shape: "ring",
-                        text: RED._("tock.status.disconnect")
+                        text: RED._("tock.status.config")
                     });
                 } else {
-                    let options = prepareRequestTock(msg, config)
+                    let options = prepareRequestTock(msg, config, this.context().flow.language)
                     let response = await requestTock(options)
                     msg.payload.intent = wrapperTock(response)
                     node.send(msg);

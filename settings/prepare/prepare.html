@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    RED.nodes.registerType('publish', {
+    RED.nodes.registerType('prepare', {
         category: 'setting',
         color: '#a6bbcf',
         defaults: {
@@ -11,7 +11,7 @@
         outputs: 1,
         icon: "merge.png",
         label: function () {
-            return this.name || "publish";
+            return this.name || "prepare";
         },
         oneditsave: function () {
             if (!$("#node-input-usetls").is(':checked')) {
@@ -21,15 +21,15 @@
     });
 </script>
 
-<script type="text/x-red" data-template-name="publish">
+<script type="text/x-red" data-template-name="prepare">
     <div class="form-row">
-        <label for="node-input-name"><i class="icon-tag"/> <span data-i18n="publish.label.name" /></label>
-        <input type="text" id="node-input-name" data-i18n="[placeholder]publish.placeholder.name" />
+        <label for="node-input-name"><i class="icon-tag"/> <span data-i18n="prepare.label.name" /></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]prepare.placeholder.name" />
     </div>
 </script>
 
 
 
-<script type="text/x-red" data-help-name="publish">
-    <p>Prepare the request to publish to linto MQTT</p>
+<script type="text/x-red" data-help-name="prepare">
+    <p>Prepare the request to publish to linto MQTT and also initialise some require parameter</p>
 </script>
