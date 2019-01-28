@@ -24,8 +24,13 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
         var node = this;
 
-        if (this.context().flow.language === undefined)
-            this.context().flow.language = process.env.LANG.split('_')[0]
+        if (this.context().flow.get('language') === undefined)
+            this.context().flow.language = process.env.DEFAULT_LANGUAGE
+
+        if (this.context().flow.register === undefined)
+            this.context().flow.register = {
+                "intent": []
+            }
 
         node.on('input', function (msg) {
             let data = msg.topic.split('/')

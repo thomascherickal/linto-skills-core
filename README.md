@@ -54,7 +54,7 @@ Here is the format require for Input / Ouput to allow those node to work
 ```
 { 
     transcript : 'text transcript',
-    intent : {
+    nlu : {
         intent : 'intentDetected',
         entitiesNumber : 1, //integer of entities
         entities : [{

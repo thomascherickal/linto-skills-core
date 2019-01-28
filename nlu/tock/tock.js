@@ -86,9 +86,9 @@ module.exports = function (RED) {
                         text: RED._("tock.status.config")
                     });
                 } else {
-                    let options = prepareRequestTock(msg, config, this.context().flow.language)
+                    let options = prepareRequestTock(msg, config, this.context().flow.get('language').split('-')[0])
                     let response = await requestTock(options)
-                    msg.payload.intent = wrapperTock(response)
+                    msg.payload.nlu = wrapperTock(response)
                     node.send(msg);
                 }
             } catch (err) {

@@ -79,9 +79,9 @@ module.exports = function (RED) {
                         text: RED._("rasa.status.disconnect")
                     });
                 } else {
-                    let options = prepareRequestRasa(msg, config, this.context().flow.language)
+                    let options = prepareRequestRasa(msg, config, this.context().flow.get('language').split('-')[0])
                     let response = await requestRasa(options)
-                    msg.payload.intent = wrapperRasa(response)
+                    msg.payload.nlu = wrapperRasa(response)
                     node.send(msg);
                 }
             } catch (err) {
