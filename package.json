@@ -27,14 +27,6 @@
     "node-red": "^0.19.6",
     "express": "4.16.2",
     "node-red-contrib-config": "^1.1.2",
-    "node-red-node-test-helper": "git+https://github.com/Houpert/node-red-node-test-helper.git#fix-settings",
-    "read-pkg-up": "3.0.0",
-    "semver": "5.5.1",
-    "should": "^13.2.3",
-    "should-sinon": "0.0.6",
-    "sinon": "5.0.3",
-    "stoppable": "1.0.6",
-    "supertest": "3.0.0",
-    "when": "3.7.8"
+    "node-red-node-test-helper": "git+https://github.com/Houpert/node-red-node-test-helper.git#fix-settings"
   }
 }
