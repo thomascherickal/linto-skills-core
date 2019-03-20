@@ -3,6 +3,9 @@
         "label": {
             "name": "Nom"
         },
+        "error": {
+            "topic": "Erreur de format du topic MQTT"
+        },
         "placeholder": {
             "name": "Nom du noeud"
         }

@@ -33,9 +33,17 @@ module.exports = function (RED) {
             }
 
         node.on('input', function (msg) {
-            let data = msg.topic.split('/')
-            msg.topic = data[0] + "/tolinto/" + data[2] + "/nlp/file/" + data[5]
-            node.send(msg)
+            try {
+                if (msg.topic === undefined || msg.topic.split('/').length < 6) {
+                    this.error(RED._("prepare.error.topic"))
+                } else {
+                    let data = msg.topic.split('/')
+                    msg.topic = data[0] + "/tolinto/" + data[2] + "/nlp/file/" + data[5]
+                    node.send(msg)
+                }
+            } catch (err) {
+                this.error(RED._("prepare.error.topic"))
+            }
         })
     }
     RED.nodes.registerType("prepare", prepareFlow);
