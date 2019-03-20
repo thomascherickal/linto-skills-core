@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2017 Linagora.
+ * Copyright (c) 2018 Linagora.
  *
- * This file is part of Business-Logic-Server
+ * This file is part of Linto-Skills-Core
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
