@@ -18,13 +18,13 @@
   },
   "dependencies": {
     "debug": "^4.0.1",
-    "express": "^4.16.4",
-    "ms-bing-speech-service": "^2.0.6"
+    "ms-bing-speech-service": "^2.0.6",
+    "request": "^2.88.0"
   },
   "devDependencies": {
+    "express": "4.16.2",
     "linto-utility": "git+ssh://git@ci.linagora.com:7999/linagora/lgs/labs/Linto-Device/Linto-Backend/linto-skills-utility.git",
     "node-red": "^0.19.6",
-    "express": "4.16.2",
     "node-red-contrib-config": "^1.1.2",
     "node-red-node-test-helper": "git+https://github.com/Houpert/node-red-node-test-helper.git#fix-settings"
   }
