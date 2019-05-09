@@ -1,0 +1,18 @@
+{
+  "extends": "strongloop",
+  "env": {
+    "es6": true,
+    "mocha": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017
+},
+  "rules" :{
+    "comma-dangle": ["error", "never"],
+    "max-len": ["error", { "code": 100 , "ignoreComments": true , "ignoreTrailingComments": true }],
+    "no-unused-vars" : ["error", { "varsIgnorePattern": "debug" }],
+    "one-var": ["error", { "separateRequires": true, "var" : "consecutive", "let" : "consecutive", "const": "consecutive"}],
+    "radix": ["error", "as-needed"],
+    "semi": ["error", "never"]
+  }
+}

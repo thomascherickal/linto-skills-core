@@ -9,8 +9,7 @@
             url: {
                 value: "",
                 validate: function (v) {
-                    return (v.trim().length === 0) || (v.indexOf("://") === -1) || (v.trim().indexOf("http") ===
-                        0)
+                    return (v.trim().length === 0) || (v.indexOf("://") === -1) || (v.trim().indexOf("http") === 0)
                 }
             },
             appname: {
@@ -42,5 +41,5 @@
 </script>
 
 <script type="text/x-red" data-help-name="tock">
-    <p>A node that make a call to TOCK API</p>
+    <p>A node that call the TOCK API</p>
 </script>

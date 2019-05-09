@@ -9,8 +9,7 @@
             url: {
                 value: "",
                 validate: function (v) {
-                    return (v.trim().length === 0) || (v.indexOf("://") === -1) || (v.trim().indexOf("http") ===
-                        0)
+                    return (v.trim().length === 0) || (v.indexOf("://") === -1) || (v.trim().indexOf("http") === 0)
                 }
             },
             mode: {
@@ -52,5 +51,5 @@
 
 
 <script type="text/x-red" data-help-name="linstt">
-    <p>A STT connector to linstt</p>
+    <p>STT connector for linstt</p>
 </script>

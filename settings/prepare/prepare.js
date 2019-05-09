@@ -16,35 +16,38 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+'use strict'
 
-module.exports = function (RED) {
-    const debug = require("debug")("redmanager:flow:core:settings:prepare");
+module.exports = function(RED) {
+  const debug = require('debug')('redmanager:flow:core:settings:prepare'),
+    TOPIC_LENGTH = 6
 
-    function prepareFlow(config) {
-        RED.nodes.createNode(this, config);
-        var node = this;
+  function prepareFlow(config) {
+    RED.nodes.createNode(this, config)
+    var node = this
 
-        if (this.context().flow.get('language') === undefined)
-            this.context().flow.language = process.env.DEFAULT_LANGUAGE
+    if (this.context().flow.get('language') === undefined)
+      this.context().flow.language = process.env.DEFAULT_LANGUAGE
 
-        if (this.context().flow.register === undefined)
-            this.context().flow.register = {
-                "intent": []
-            }
+    if (this.context().flow.register === undefined)
+      this.context().flow.register = {
+        intent: []
+      }
 
-        node.on('input', function (msg) {
-            try {
-                if (msg.topic === undefined || msg.topic.split('/').length < 6) {
-                    this.error(RED._("prepare.error.topic"))
-                } else {
-                    let data = msg.topic.split('/')
-                    msg.topic = data[0] + "/tolinto/" + data[2] + "/nlp/file/" + data[5]
-                    node.send(msg)
-                }
-            } catch (err) {
-                this.error(RED._("prepare.error.topic"))
-            }
-        })
-    }
-    RED.nodes.registerType("prepare", prepareFlow);
-};
+    node.on('input', function(msg) {
+      try {
+        let topic = msg.topic
+        if (topic === undefined || topic.split('/').length < TOPIC_LENGTH) {
+          this.error(RED._('prepare.error.topic'))
+        } else {
+          let data = msg.topic.split('/')
+          msg.topic = data[0] + '/tolinto/' + data[2] + '/nlp/file/' + data[5]
+          node.send(msg)
+        }
+      } catch (err) {
+        this.error(RED._('prepare.error.topic'))
+      }
+    })
+  }
+  RED.nodes.registerType('prepare', prepareFlow)
+}

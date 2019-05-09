@@ -8,7 +8,7 @@
         "placeholder": {
             "name": "Nom du noeud",
             "url" : "http://",
-            "appname" : "nom de l'application NLU"
+            "appname" : "Nom de l'application NLU"
         },
         "status": {
             "connect": "Connecter",

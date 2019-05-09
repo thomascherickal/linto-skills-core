@@ -16,90 +16,94 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module.exports = function (RED) {
-    const debug = require('debug')('redmanager:flow:core:nlu:tock')
-    const request = require('request')
-    const NAMESPACE = "app"
+'use strict'
 
-    function prepareRequestTock(msg, config, language) {
-        let options = {
-            method: 'POST',
-            url: config.url,
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: {
-                queries: [msg.payload.transcript],
-                namespace: NAMESPACE,
-                applicationName: config.appname,
-                context: {
-                    language
-                }
-            },
-            json: true
-        };
-        return options;
-    }
+module.exports = function(RED) {
+  const debug = require('debug')('redmanager:flow:core:nlu:tock')
+  const request = require('request')
+  const NAMESPACE = 'app'
 
-    async function requestTock(options) {
-        return new Promise((resolve, reject) => {
-            try {
-                request(options, function (error, response, body) {
-                    if (error) {
-                        reject({
-                            error
-                        })
-                    }
-                    resolve(body)
-                });
-            } catch (error) {
-                reject(error)
-            }
-        })
-    }
-
-    function wrapperTock(nluData) {
-        let wrapper = {}
-        wrapper.intent = nluData.intent
-        if (nluData.entities.length !== undefined)
-            wrapper.entitiesNumber = nluData.entities.length
-        wrapper.entities = []
-        let text = nluData.retainedQuery
-        for (let i = 0; i < nluData.entities.length; i++) {
-            wrapper.entities[i] = nluData.entities[i]
-            wrapper.entities[i].value = text.substring(nluData.entities[i].start, nluData.entities[i].end)
-            wrapper.entities[i].entity = nluData.entities[i].entity.role
+  function prepareRequestTock(msg, config, language) {
+    let options = {
+      method: 'POST',
+      url: config.url,
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: {
+        queries: [msg.payload.transcript],
+        namespace: NAMESPACE,
+        applicationName: config.appname,
+        context: {
+          language
         }
-        return wrapper
+      },
+      json: true
     }
+    return options
+  }
 
-    function TockRequest(config) {
-        RED.nodes.createNode(this, config);
-        let node = this;
-        node.on('input', async function (msg) {
-            try {
-                if (config.url === '' || config.appname === '') {
-                    node.error(RED._("tock.error.config"))
-                    node.status({
-                        fill: "yellow",
-                        shape: "ring",
-                        text: RED._("tock.status.config")
-                    });
-                } else {
-                    let options = prepareRequestTock(msg, config, this.context().flow.get('language').split('-')[0])
-                    let response = await requestTock(options)
-                    msg.payload.nlu = wrapperTock(response)
-                    node.send(msg);
-                }
-            } catch (err) {
-                node.error(RED._("tock.error.connect"))
-                node.status({
-                    fill: "red",
-                    shape: "ring",
-                    text: RED._("tock.status.disconnect")
-                });
-            }
-        });
+  async function requestTock(options) {
+    return new Promise((resolve, reject) => {
+      try {
+        request(options, function(error, response, body) {
+          if (error)
+            reject(error)
+          resolve(body)
+        })
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  function wrapperTock(nluData) {
+    let wrapper = {}
+    wrapper.intent = nluData.intent
+
+    let nluEntities = nluData.entities
+    if (nluEntities.length !== undefined)
+      wrapper.entitiesNumber = nluEntities.length
+    wrapper.entities = []
+
+    let text = nluData.retainedQuery
+    for (let i = 0; i < nluEntities.length; i++) {
+      let textEntitie = text.substring(nluEntities[i].start, nluEntities[i].end)
+      wrapper.entities[i] = nluEntities[i]
+      wrapper.entities[i].value = textEntitie
+      wrapper.entities[i].entity = nluEntities[i].entity.role
     }
-    RED.nodes.registerType("tock", TockRequest)
+    return wrapper
+  }
+
+  function TockRequest(config) {
+    RED.nodes.createNode(this, config)
+    let node = this
+    node.on('input', async function(msg) {
+      try {
+        if (config.url === '' || config.appname === '') {
+          node.error(RED._('tock.error.config'))
+          node.status({
+            fill: 'yellow',
+            shape: 'ring',
+            text: RED._('tock.status.config')
+          })
+        } else {
+          let language = this.context().flow.get('language').split('-')[0],
+            options = prepareRequestTock(msg, config, language),
+            response = await requestTock(options)
+          msg.payload.nlu = wrapperTock(response)
+          node.send(msg)
+        }
+      } catch (err) {
+        node.error(RED._('tock.error.connect'))
+        node.status({
+          fill: 'red',
+          shape: 'ring',
+          text: RED._('tock.status.disconnect')
+        })
+      }
+    })
+  }
+  RED.nodes.registerType('tock', TockRequest)
 }

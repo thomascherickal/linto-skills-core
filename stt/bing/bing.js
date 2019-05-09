@@ -16,61 +16,63 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module.exports = function (RED) {
-    const debug = require('debug')('redmanager:flow:core:stt:bing')
-    const speechService = require('ms-bing-speech-service')
+'use strict'
 
-    async function decodingAudio(buffer, recognizer) {
-        return new Promise((resolve, reject) => {
-            recognizer
-                .start()
-                .then(_ => {
-                    recognizer.sendFile(buffer)
-                        .then(_ => debug('file send'))
-                        .catch((err) => {
-                            reject(err)
-                        })
-                    recognizer.on('recognition', (res) => {
-                        if (res.RecognitionStatus === 'Success') {
-                            resolve({
-                                transcript: res.NBest[0].Display,
-                                confidence: res.NBest[0].Confidence
-                            })
-                        }
-                    })
-                }).catch((err) => {
-                    reject(err)
-                })
-        })
-    }
+module.exports = function(RED) {
+  const debug = require('debug')('redmanager:flow:core:stt:bing')
+  const SpeechService = require('ms-bing-speech-service')
 
-    async function prepareDecoding(buffer, config) {
-        const recognizer = new speechService({
-            language: config.language,
-            subscriptionKey: config.key,
-            mode: config.mode,
-            format: 'detailed'
-        })
-        return await decodingAudio(buffer, recognizer)
-    }
-
-    function Bing(config) {
-        RED.nodes.createNode(this, config);
-        var node = this;
-        node.on('input', async function (msg) {
-            try {
-                let audioBuffer = Buffer.from(msg.payload.audio, 'base64')
-                delete msg.payload.audio
-                if (Buffer.isBuffer(audioBuffer)) {
-                    let transResult = await prepareDecoding(audioBuffer, config)
-                    msg.payload.transcript = transResult.transcript
-                    msg.payload.confidence = transResult.confidence
-                    node.send(msg);
-                }
-            } catch (err) {
-
+  async function decodingAudio(buffer, recognizer) {
+    return new Promise((resolve, reject) => {
+      recognizer
+        .start()
+        .then(() => {
+          recognizer.sendFile(buffer)
+            .then(() => debug('file send'))
+            .catch((err) => {
+              reject(err)
+            })
+          recognizer.on('recognition', (res) => {
+            if (res.RecognitionStatus === 'Success') {
+              resolve({
+                transcript: res.NBest[0].Display,
+                confidence: res.NBest[0].Confidence
+              })
             }
-        });
-    }
-    RED.nodes.registerType("bing", Bing);
+          })
+        }).catch((err) => {
+          reject(err)
+        })
+    })
+  }
+
+  async function prepareDecoding(buffer, config) {
+    const recognizer = new SpeechService({
+      language: config.language,
+      subscriptionKey: config.key,
+      mode: config.mode,
+      format: 'detailed'
+    })
+    return await decodingAudio(buffer, recognizer)
+  }
+
+  function Bing(config) {
+    RED.nodes.createNode(this, config)
+    var node = this
+    node.on('input', async function(msg) {
+      try {
+        let audioBuffer = Buffer.from(msg.payload.audio, 'base64')
+        delete msg.payload.audio
+        if (Buffer.isBuffer(audioBuffer)) {
+          let transResult = await prepareDecoding(audioBuffer, config)
+          msg.payload.transcript = transResult.transcript
+          msg.payload.confidence = transResult.confidence
+          node.send(msg)
+        }
+      } catch (err) {
+
+      }
+    })
+  }
+  RED.nodes.registerType('bing', Bing)
 }

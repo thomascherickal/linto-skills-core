@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test"
+    "test": "mocha test",
+    "pretest": "eslint --ignore-path .gitignore .",
+    "pretest-fix": "eslint --ignore-path .gitignore . --fix"
   },
   "author": "",
   "license": "AGPL-3.0-or-later",
@@ -19,11 +21,13 @@
   "dependencies": {
     "debug": "^4.0.1",
     "ms-bing-speech-service": "^2.0.6",
+    "prettier": "^1.17.0",
     "request": "^2.88.0"
   },
   "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-strongloop": "^2.1.0",
     "express": "4.16.2",
-    "linto-utility": "git+ssh://git@ci.linagora.com:7999/linagora/lgs/labs/Linto-Device/Linto-Backend/linto-skills-utility.git",
     "node-red": "^0.19.6",
     "node-red-contrib-config": "^1.1.2",
     "node-red-node-test-helper": "git+https://github.com/Houpert/node-red-node-test-helper.git#fix-settings"
