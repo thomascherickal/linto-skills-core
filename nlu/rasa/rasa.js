@@ -62,7 +62,7 @@ module.exports = function(RED) {
   function wrapperRasa(nluData) {
     let wrapper = {}
     wrapper.intent = nluData.intent.name
-    if (nluData.entities.length !== undefined)
+    if (nluData.entities.length)
       wrapper.entitiesNumber = nluData.entities.length
     wrapper.entities = nluData.entities
     return wrapper

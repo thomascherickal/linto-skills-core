@@ -62,7 +62,7 @@ module.exports = function(RED) {
     wrapper.intent = nluData.intent
 
     let nluEntities = nluData.entities
-    if (nluEntities.length !== undefined)
+    if (nluEntities.length)
       wrapper.entitiesNumber = nluEntities.length
     wrapper.entities = []
 

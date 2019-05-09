@@ -69,7 +69,7 @@ module.exports = function(RED) {
     node.on('input', async function(msg) {
       try {
         let json = JSON.parse(msg.payload)
-        if (json.audio !== undefined) {
+        if (json.audio) {
           let audioBuffer = Buffer.from(json.audio, 'base64')
           delete json.audio
           if (Buffer.isBuffer(audioBuffer)) {

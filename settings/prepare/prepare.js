@@ -26,10 +26,10 @@ module.exports = function(RED) {
     RED.nodes.createNode(this, config)
     var node = this
 
-    if (this.context().flow.get('language') === undefined)
+    if (!this.context().flow.get('language'))
       this.context().flow.language = process.env.DEFAULT_LANGUAGE
 
-    if (this.context().flow.register === undefined)
+    if (!this.context().flow.register)
       this.context().flow.register = {
         intent: []
       }
@@ -37,7 +37,7 @@ module.exports = function(RED) {
     node.on('input', function(msg) {
       try {
         let topic = msg.topic
-        if (topic === undefined || topic.split('/').length < TOPIC_LENGTH) {
+        if (!topic || topic.split('/').length < TOPIC_LENGTH) {
           this.error(RED._('prepare.error.topic'))
         } else {
           let data = msg.topic.split('/')
