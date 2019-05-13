@@ -2,7 +2,8 @@
 Here are crucial LinTo skill, without them a process will possibly can't be guaranteed to work the expected way
 
 ## LinTo Skills
-Here a brief resume of LinTo core skills by categories
+Here is the recommanded skills to be used for LinTO
+Here a brief resume of LinTo core skills by categories.
 
 ### STT
 Regroup the STT (Speach To Text) nodes that will allow to transcript in text what is say to LinTo
