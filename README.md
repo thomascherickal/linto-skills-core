@@ -1,5 +1,5 @@
 # LinTo-Skills-Core
-Here are crucial LinTo skill, without them a process will possibly can't be guaranteed to work the expected way
+Here are the recommended LinTo skill, without them a process can't be guaranteed to work the expected way
 
 ## LinTo Skills
 Here is the recommanded skills to be used for LinTO

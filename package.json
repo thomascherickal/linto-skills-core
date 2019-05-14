@@ -1,5 +1,5 @@
 {
-  "name": "node-red-linto-skills",
+  "name": "@linto-ai/node-red-linto-skills-core",
   "version": "0.0.1",
   "description": "Recommanded skills to be used by LinTO",
   "scripts": {
@@ -37,5 +37,16 @@
     "node-red-contrib-config": "^1.1.2",
     "node-red-node-test-helper": "git+https://github.com/Houpert/node-red-node-test-helper.git#fix-settings",
     "prettier": "^1.17.0"
-  }
+  },
+  "homepage": "https://linto.ai/",
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [
+    "linto",
+    "node-red",
+    "skills",
+    "nlu-node",
+    "stt-node"
+  ]
 }
