@@ -1,6 +1,6 @@
 {
   "name": "@linto-ai/node-red-linto-skills-core",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Recommanded skills to be used by LinTO",
   "scripts": {
     "test": "mocha test",
@@ -33,7 +33,7 @@
     "eslint": "^5.16.0",
     "eslint-config-strongloop": "^2.1.0",
     "express": "4.16.2",
-    "node-red": "^0.19.6",
+    "node-red": "^0.20.5",
     "node-red-contrib-config": "^1.1.2",
     "node-red-node-test-helper": "git+https://github.com/Houpert/node-red-node-test-helper.git#fix-settings",
     "prettier": "^1.17.0"
