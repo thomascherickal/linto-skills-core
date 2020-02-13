@@ -1,0 +1,14 @@
+{
+  "linto-config-mqtt": {
+    "label": {
+      "host" : "Host",
+      "port" : "Port",
+      "scope" : "Scope"
+    },
+    "placeholder":{
+      "host" : "http://",
+      "port" : "1883",
+      "scope" : "Hardware scope"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "linto-application-in": {
+    "label": {
+      "name" : "Name"
+    },
+    "placeholder":{
+      "name" : "Node name"
+    }
+  }
+}

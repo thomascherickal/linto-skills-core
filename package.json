@@ -1,6 +1,6 @@
 {
-  "name": "@linto-ai/node-red-linto-skills-core",
-  "version": "0.0.2",
+  "name": "@linto-ai/node-red-linto-core",
+  "version": "0.0.1",
   "description": "Recommanded skills to be used by LinTO",
   "scripts": {
     "test": "mocha test",
@@ -18,25 +18,33 @@
   "license": "AGPL-3.0-or-later",
   "node-red": {
     "nodes": {
-      "tock": "nlu/tock/tock.js",
-      "bing": "stt/bing/bing.js",
-      "linstt": "stt/linstt/linstt.js",
-      "prepare": "settings/prepare/prepare.js"
+      "linto-application-in": "linto-application-in/linto-application-in.js",
+      "linto-config-mqtt": "linto-config/mqtt-config/linto-config-mqtt.js",
+      "linto-config-transcribe": "linto-config/transcribe-config/linto-config-transcribe.js",
+      "linto-config-evaluate": "linto-config/evaluate-config/linto-config-evaluate.js",
+      "linto-config": "linto-config/linto-config.js",
+      "dictionary-custom": "linto-dictionary/linto-dictionary-custom/linto-dictionary-custom.js",
+      "dictionary-color": "linto-dictionary/linto-dictionary-color/linto-dictionary-color.js",
+      "dictionary-continent": "linto-dictionary/linto-dictionary-continent/linto-dictionary-continent.js",
+      "dictionary-countrie": "linto-dictionary/linto-dictionary-countrie/linto-dictionary-countrie.js",
+      "dictionary-french-department": "linto-dictionary/linto-dictionary-french-department/linto-dictionary-french-department.js",
+      "dictionary-french-region": "linto-dictionary/linto-dictionary-french-region/linto-dictionary-french-region.js",
+      "linto-evaluate": "linto-evaluate/linto-evaluate.js",
+      "linto-model-dataset": "linto-model-dataset/linto-model-dataset.js",
+      "linto-on-connect": "linto-on-connect/linto-on-connect.js",
+      "linto-out": "linto-out/linto-out.js",
+      "linto-red-event-emiter": "linto-red-event-emitter/linto-red-event-emitter.js",
+      "linto-terminal-in": "linto-terminal-in/linto-terminal-in.js",
+      "linto-transcribe": "linto-transcribe/linto-transcribe.js",
+      "linto-ui": "linto-ui/linto-ui.js",
+      "linto-to-ui": "linto-ui/to-linto-ui.js",
+      "linto-tts": "linto-tts/linto-tts.js"
     }
   },
   "dependencies": {
     "debug": "^4.0.1",
-    "ms-bing-speech-service": "^2.0.6",
-    "request": "^2.88.0"
-  },
-  "devDependencies": {
-    "eslint": "^5.16.0",
-    "eslint-config-strongloop": "^2.1.0",
-    "express": "4.16.2",
-    "node-red": "^0.20.5",
-    "node-red-contrib-config": "^1.1.2",
-    "node-red-node-test-helper": "git+https://github.com/Houpert/node-red-node-test-helper.git#fix-settings",
-    "prettier": "^1.17.0"
+    "@linto-ai/linto-components": "^0.0.1",
+    "lodash": "^4.17.15"
   },
   "homepage": "https://linto.ai/",
   "directories": {

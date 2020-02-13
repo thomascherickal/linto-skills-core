@@ -1,0 +1,17 @@
+{
+  "linto-config-transcribe": {
+    "label": {
+      "host": "Host",
+      "api": "API"
+    },
+    "placeholder": {
+      "host": "http://"
+    },
+    "shared": {
+      "list_api": {
+        "linstt": "Linstt",
+        "bing": "Bing"
+      }
+    }
+  }
+}

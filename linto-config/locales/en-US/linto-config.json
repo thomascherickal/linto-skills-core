@@ -1,0 +1,20 @@
+{
+  "linto-config": {
+    "label": {
+      "name" : "Name",
+      "configMqtt" : "MQTT",
+      "configEvaluate" : "Evaluate",
+      "configTranscribe" : "Transcribe",
+      "language" : "Lang"
+    },
+    "placeholder":{
+      "name" : "Node name"
+    },
+    "shared": {
+      "list_lang": {
+        "fr": "fr-FR",
+        "en": "en-US"
+      }
+    }
+  }
+}
