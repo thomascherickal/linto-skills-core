@@ -1,6 +1,6 @@
 const debug = require('debug')(`linto:skill:v2:core:transcribe:linstt`)
 
-const TRANSCRIBE_PATH = '/transcribe'
+const TRANSCRIBE_PATH = 'transcribe'
 
 module.exports = async function (msg) {
   let audio = msg.payload.audio
@@ -9,7 +9,7 @@ module.exports = async function (msg) {
     delete msg.payload.audio
     if (Buffer.isBuffer(audioBuffer)) {
       let options = prepareRequest(audioBuffer)
-      let transcriptResult = await this.request.post(this.config.transcribe.host + TRANSCRIBE_PATH, options)
+      let transcriptResult = await this.request.post(this.config.transcribe.host + '/' + this.config.transcribe.service + '/' + TRANSCRIBE_PATH, options)
       msg.payload.transcript = wrapperLinstt(transcriptResult)
 
       return msg

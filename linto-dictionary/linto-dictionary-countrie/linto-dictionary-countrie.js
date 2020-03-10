@@ -2,7 +2,7 @@ const debug = require('debug')('linto:skill:v2:core:dictionary')
 const LintoDictionaryCoreNode = require('@linto-ai/linto-components').nodes.lintoDictionaryCoreNode
 const { template } = require('@linto-ai/linto-components').components
 
-const PALETTE_NODE_NAME = 'countrie'
+const PALETTE_NODE_NAME = 'country'
 
 module.exports = function (RED) {
   function Node(config) {

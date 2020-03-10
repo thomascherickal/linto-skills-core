@@ -7,6 +7,7 @@ module.exports = function (RED) {
     this.api = n.api
     this.config = {
       host: n.host,
+      service: n.service,
       api: n.api,
     }
   }

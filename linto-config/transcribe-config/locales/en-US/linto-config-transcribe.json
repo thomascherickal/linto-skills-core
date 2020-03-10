@@ -2,10 +2,12 @@
   "linto-config-transcribe": {
     "label": {
       "host": "Host",
-      "api": "API"
+      "api": "API",
+      "service" : "Service"
     },
     "placeholder": {
-      "host": "http://"
+      "host": "http://",
+      "service" : "Service Name"
     },
     "shared": {
       "list_api": {
