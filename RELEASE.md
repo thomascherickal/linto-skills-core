@@ -1,5 +1,5 @@
 # 0.0.2
-- Fixe dictionary country name
+- Fix dictionary name
 - Added service name for transcribe node
 
 # 0.0.1
