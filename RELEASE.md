@@ -1,3 +1,6 @@
+# 0.0.3
+- Fix lexical seeding
+
 # 0.0.2
 - Fix dictionary name
 - Added service name for transcribe node
