@@ -29,6 +29,7 @@ module.exports = (skills, dictionaries, flowLanguage) => {
     let entity, entityError
 
     dictionary.data.split(BACKLINE_SEPARATOR).map(cmd => {
+
       cmd = cmd.toLowerCase()
       if (cmd.indexOf(DICTIONARY_LANGUAGE_SEPARATOR) > -1) {
 
@@ -78,7 +79,7 @@ module.exports = (skills, dictionaries, flowLanguage) => {
         }
 
         if (cmd.indexOf(ENTITY_METADATA_SEPARATOR) > -1) {
-          line = exctractDefinedEntity.call(seed, line, intent.lang) //extract and manage intent and entity
+          line = exctractDefinedEntity.call(seed, line, intent.lang, flowLanguage.lang) //extract and manage intent and entity
         }
 
         if (line && intent.items.indexOf(line) === -1) {
@@ -142,22 +143,24 @@ function extractCommandData(cmd) {
   }
 }
 
-function exctractDefinedEntity(cmd, lang) {
+function exctractDefinedEntity(cmd, lang, flowLang) {
   let match = null
   let line = cmd
 
-  while (match = REGEX_DEFINE_ENTITY.exec(cmd)) {
-    line = line.replace(match[0], `${COMMAND_METADATA_SEEDING}${match[2]}`)
-    let isAdded = false
-    this.data.entities.map(entity => {
-      if (entity.name === match[2]) {
-        isAdded = true
+  if (lang === flowLang) {
+    while (match = REGEX_DEFINE_ENTITY.exec(cmd)) {
+      line = line.replace(match[0], `${COMMAND_METADATA_SEEDING}${match[2]}`)
+      let isAdded = false
+      this.data.entities.map(entity => {
+        if (entity.name === match[2]) {
+          isAdded = true
 
-        if (entity.items.indexOf(match[1]) === -1)
-          entity.items.push(match[1])
-      }
-    })
-    if (!isAdded) this.data.entities.push({ name: match[2], items: [match[1]] })
+          if (entity.items.indexOf(match[1]) === -1)
+            entity.items.push(match[1])
+        }
+      })
+      if (!isAdded) this.data.entities.push({ name: match[2], items: [match[1]] })
+    }
   }
 
   return line

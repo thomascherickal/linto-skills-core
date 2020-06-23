@@ -62,7 +62,6 @@ module.exports = (skills, dictionaries, tock, flowLanguage) => {
         }
         
         if (intent && (intent.language === flowLanguage.language || intent.language === flowLanguage.lang)) {
-          application.sentences.push(intent)
           isValidCmd(intent.text) ? application.sentences.push(intent) : application.errors.push(intent)
         }
       }
