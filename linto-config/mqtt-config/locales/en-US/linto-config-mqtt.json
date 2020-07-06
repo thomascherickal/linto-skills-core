@@ -3,12 +3,16 @@
     "label": {
       "host" : "Host",
       "port" : "Port",
-      "scope" : "Scope"
+      "scope" : "Scope",
+      "login" : "Login",
+      "password" : "Password"
     },
     "placeholder":{
       "host" : "http://",
       "port" : "1883",
-      "scope" : "Hardware scope"
+      "scope" : "Hardware scope",
+      "login" : "Login",
+      "password" : "Password"
     }
   }
 }

@@ -30,7 +30,7 @@ class LintoOnConnect extends LintoCoreNode {
     if (!serialNumber.length) {
       this.sendStatus('yellow', 'ring', 'Linto application-in or terminal-in is require')
     } else if (mqttConfig) {
-      await this.mqtt.connect(mqttConfig.host, mqttConfig.port)
+      await this.mqtt.connect(mqttConfig)
 
       this.mqtt.subscribeToLinto(mqttConfig.toLinto, serialNumber, TOPIC_STATUSACK)
       this.mqtt.onMessage(mqttHandler.bind(this), TOPIC_STATUSACK) // get linto info from flow

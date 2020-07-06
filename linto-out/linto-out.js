@@ -26,7 +26,7 @@ class LintoTerminalOut extends LintoCoreNode {
   async init() {
     let mqttConfig = this.getFlowConfig('confMqtt')
     if (mqttConfig) {
-      await this.mqtt.connect(mqttConfig.host, mqttConfig.port)
+      await this.mqtt.connect(mqttConfig)
       this.wireNode.onMessage(this, toHardWareLinto.call(this), NODE_SUCCES_MESSAGE)
     } else {
       this.sendStatus('yellow', 'ring', 'Configuration is missing')

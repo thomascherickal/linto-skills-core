@@ -24,7 +24,7 @@ class LintoTerminalIn extends LintoCoreNode {
   async init() {
     let mqttConfig = this.getFlowConfig('confMqtt')
     if (mqttConfig && this.config.sn) {
-      await this.mqtt.connect(mqttConfig.host, mqttConfig.port)
+      await this.mqtt.connect(mqttConfig)
       this.mqtt.subscribeToLinto(mqttConfig.fromLinto, this.config.sn, TOPIC_SUBSCRIBE)
       this.mqtt.onMessage(mqttHandler.bind(this), TOPIC_FILTER)
       this.cleanStatus()

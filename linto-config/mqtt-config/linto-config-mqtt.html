@@ -14,6 +14,12 @@
             scope: {
                 value: '',
                 required: true
+            },
+            login: {
+                value: ''
+            },
+            password: {
+                value: ''
             }
         },
         label: function () {
@@ -36,5 +42,15 @@
     <div class="form-row">
         <label for="node-config-input-scope"><i class="fa fa-id-card "/> <span data-i18n="linto-config-mqtt.label.scope"/></label>
         <input type="text" id="node-config-input-scope" data-i18n="[placeholder]linto-config-mqtt.placeholder.scope" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-login"><i class="fa fa-user"/> <span data-i18n="linto-config-mqtt.label.login"/></label>
+        <input type="text" id="node-config-input-login" data-i18n="[placeholder]linto-config-mqtt.placeholder.login" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-password"><i class="fa fa-key"/> <span data-i18n="linto-config-mqtt.label.password"/></label>
+        <input type="password" id="node-config-input-password" data-i18n="[placeholder]linto-config-mqtt.placeholder.password" />
     </div>
 </script>

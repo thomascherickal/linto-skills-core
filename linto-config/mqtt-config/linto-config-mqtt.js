@@ -9,10 +9,15 @@ module.exports = function (RED) {
     this.host = n.host
     this.port = n.port
     this.scope = n.scope
+    this.user = n.login
+    this.password = n.password
 
     this.config = {
       host: n.host,
       port: n.port,
+
+      user: n.login,
+      password: n.password,
 
       scope: n.scope,
       fromLinto: n.scope + '/' + TOPIC_FROM,
