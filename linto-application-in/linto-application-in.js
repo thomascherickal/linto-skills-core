@@ -1,8 +1,7 @@
 const debug = require('debug')('linto:skill:v2:core:linto-application-in')
-const LintoCoreNode = require('@linto-ai/linto-components').nodes.lintoCoreNode
-const { mqtt, authToken } = require('@linto-ai/linto-components').connect
+const LintoConnectCoreNode = require('@linto-ai/linto-components').nodes.lintoConnectCoreNode
+const { authToken } = require('@linto-ai/linto-components').connect
 const { wireEvent } = require('@linto-ai/linto-components').components
-
 
 const tts = require('./data/tts')
 
@@ -15,17 +14,17 @@ const LINTO_OUT_EVENT = 'linto-out'
 module.exports = function (RED) {
   function Node(config) {
     RED.nodes.createNode(this, config)
-    new LintoTerminalIn(RED, this, config)
+    new LintoApplicationIn(RED, this, config)
   }
   RED.nodes.registerType('linto-application-in', Node)
 }
 
-class LintoTerminalIn extends LintoCoreNode {
+
+class LintoApplicationIn extends LintoConnectCoreNode {
   constructor(RED, node, config) {
     super(node, config)
-    this.mqtt = new mqtt(this)
-    this.wireEvent = wireEvent.init(RED)
 
+    this.wireEvent = wireEvent.init(RED)
     this.init()
   }
 
@@ -39,6 +38,8 @@ class LintoTerminalIn extends LintoCoreNode {
         await this.mqtt.connect(mqttConfig)
         this.mqtt.subscribeToLinto(mqttConfig.fromLinto, DEFAULT_TOPIC, TOPIC_SUBSCRIBE)
         this.mqtt.onMessage(mqttHandler.bind(this), TOPIC_FILTER)
+
+        await this.configure()
       } else {
         this.sendStatus('yellow', 'ring', 'Configuration is missing')
       }
@@ -75,7 +76,7 @@ async function mqttHandler(topic, payload) {
       payload: {
         say: tts[this.getFlowConfig('language').language].say.auth_error,
         error: {
-          message : JSON.parse(response.body).message,
+          message: JSON.parse(response.body).message,
           code: response.statusCode
         }
       }

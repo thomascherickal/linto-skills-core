@@ -1,5 +1,5 @@
 const debug = require('debug')('linto:skill:v2:core:linto-terminal-in')
-const LintoCoreNode = require('@linto-ai/linto-components').nodes.lintoCoreNode
+const LintoConnectCoreNode = require('@linto-ai/linto-components').nodes.lintoConnectCoreNode
 const { mqtt } = require('@linto-ai/linto-components').connect
 
 const TOPIC_SUBSCRIBE = '#'
@@ -13,10 +13,9 @@ module.exports = function (RED) {
   RED.nodes.registerType('linto-terminal-in', Node)
 }
 
-class LintoTerminalIn extends LintoCoreNode {
+class LintoTerminalIn extends LintoConnectCoreNode {
   constructor(RED, node, config) {
     super(node, config)
-    this.mqtt = new mqtt(this)
 
     this.init()
   }
@@ -28,6 +27,8 @@ class LintoTerminalIn extends LintoCoreNode {
       this.mqtt.subscribeToLinto(mqttConfig.fromLinto, this.config.sn, TOPIC_SUBSCRIBE)
       this.mqtt.onMessage(mqttHandler.bind(this), TOPIC_FILTER)
       this.cleanStatus()
+
+      await this.configure()
     } else {
       this.sendStatus('yellow', 'ring', 'Configuration is missing')
     }

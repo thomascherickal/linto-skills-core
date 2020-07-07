@@ -1,7 +1,6 @@
 const debug = require('debug')('linto:skill:v2:core:linto-out')
-const LintoCoreNode = require('@linto-ai/linto-components').nodes.lintoCoreNode
+const LintoConnectCoreNode = require('@linto-ai/linto-components').nodes.lintoConnectCoreNode
 const { wireEvent } = require('@linto-ai/linto-components').components
-const { mqtt } = require('@linto-ai/linto-components').connect
 
 const NODE_SUCCES_MESSAGE = 'Connected'
 
@@ -13,13 +12,12 @@ module.exports = function (RED) {
   RED.nodes.registerType('linto-out', Node)
 }
 
-class LintoTerminalOut extends LintoCoreNode {
+class LintoTerminalOut extends LintoConnectCoreNode {
   constructor(RED, node, config) {
     super(node, config)
 
     this.wireEvent = wireEvent.init(RED)
 
-    this.mqtt = new mqtt(this)
     this.init()
   }
 
@@ -28,6 +26,8 @@ class LintoTerminalOut extends LintoCoreNode {
     if (mqttConfig) {
       await this.mqtt.connect(mqttConfig)
       this.wireNode.onMessage(this, toHardWareLinto.call(this), NODE_SUCCES_MESSAGE)
+
+      await this.configure()
     } else {
       this.sendStatus('yellow', 'ring', 'Configuration is missing')
     }

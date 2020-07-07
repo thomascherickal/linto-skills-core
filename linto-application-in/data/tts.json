@@ -1,0 +1,12 @@
+{
+  "en-US": {
+    "say": {
+      "auth_error": "An error occurred while attempting to connect to server"
+    }
+  },
+  "fr-FR": {
+    "say": {
+      "auth_error": "Un problème est survenu lors de la connexion au serveur"
+    }
+  }
+}

@@ -1,5 +1,5 @@
 const debug = require('debug')('linto:skill:v2:core:linto-on-connect')
-const LintoCoreNode = require('@linto-ai/linto-components').nodes.lintoCoreNode
+const LintoConnectCoreNode = require('@linto-ai/linto-components').nodes.lintoConnectCoreNode
 const { mqtt } = require('@linto-ai/linto-components').connect
 const { redAction } = require('@linto-ai/linto-components').components
 
@@ -15,10 +15,9 @@ module.exports = function (RED) {
   RED.nodes.registerType('linto-on-connect', Node)
 }
 
-class LintoOnConnect extends LintoCoreNode {
+class LintoOnConnect extends LintoConnectCoreNode {
   constructor(RED, node, config) {
     super(node, config)
-    this.mqtt = new mqtt(this)
 
     this.init(RED)
   }
@@ -39,6 +38,7 @@ class LintoOnConnect extends LintoCoreNode {
       this.mqtt.onMessage(onLintoConnect.bind(this), TOPIC_STATUS) // send info from flow to linto (language)
 
       this.cleanStatus()
+      await this.configure()
     } else {
       this.sendStatus('yellow', 'ring', 'Configuration is missing')
     }
