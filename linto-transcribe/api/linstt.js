@@ -11,7 +11,13 @@ module.exports = async function (msg) {
       let options = prepareRequest(audioBuffer)
 
       try {
+        let requestUri = this.config.transcribe.host
+        if (this.config.transcribe.service !== undefined)
+          requestUri += '/' + this.config.transcribe.service
+        requestUri += '/' + TRANSCRIBE_PATH
+
         let transcriptResult = await this.request.post(this.config.transcribe.host + '/' + this.config.transcribe.service + '/' + TRANSCRIBE_PATH, options)
+
         msg.payload.transcript = wrapperLinstt(transcriptResult)
         return msg
       } catch (err) {

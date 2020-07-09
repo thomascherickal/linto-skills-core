@@ -1,3 +1,6 @@
+# 0.0.7
+- Update package to new component version
+
 # 0.0.6
 - Manage linstt new api
 
