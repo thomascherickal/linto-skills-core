@@ -1,3 +1,6 @@
+# 0.0.6
+- Manage linstt new api
+
 # 0.0.5
 - Fix linto-config transcribe service name
 

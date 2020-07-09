@@ -9,10 +9,14 @@ module.exports = async function (msg) {
     delete msg.payload.audio
     if (Buffer.isBuffer(audioBuffer)) {
       let options = prepareRequest(audioBuffer)
-      let transcriptResult = await this.request.post(this.config.transcribe.host + '/' + this.config.transcribe.service + '/' + TRANSCRIBE_PATH, options)
-      msg.payload.transcript = wrapperLinstt(transcriptResult)
 
-      return msg
+      try {
+        let transcriptResult = await this.request.post(this.config.transcribe.host + '/' + this.config.transcribe.service + '/' + TRANSCRIBE_PATH, options)
+        msg.payload.transcript = wrapperLinstt(transcriptResult)
+        return msg
+      } catch (err) {
+        throw new Error(err)
+      }
     }
   }
   throw new Error('Input should containt an audio buffer')
@@ -20,15 +24,19 @@ module.exports = async function (msg) {
 
 function prepareRequest(buffer) {
   let options = {
+    headers: {
+      accept: 'text/plain'
+    },
     formData: {
-      wavFile: {
+      file: {
         value: buffer,
         options: {
           filename: 'wavFile',
           type: 'audio/wav',
           contentType: 'audio/wav'
         }
-      }
+      },
+      speaker: 'no'
     },
     encoding: null
   }
@@ -36,10 +44,9 @@ function prepareRequest(buffer) {
 }
 
 function wrapperLinstt(transcript) {
-  let wrapper = JSON.parse(transcript)
-
+  let text = transcript.toString('utf8')
   return {
-    text: wrapper.transcript.transcription,
-    confidence: wrapper.transcript.trust_ind
+    text: text,
+    confidence: 0
   }
 }
