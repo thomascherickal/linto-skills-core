@@ -1,3 +1,6 @@
+# 0.0.5
+- Fix linto-config transcribe service name
+
 # 0.0.4
 - Added authentification in application-in
 - Added ConnectCoreNode to mqtt node
