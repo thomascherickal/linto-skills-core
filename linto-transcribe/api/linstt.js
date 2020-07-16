@@ -16,7 +16,7 @@ module.exports = async function (msg) {
           requestUri += '/' + this.config.transcribe.service
         requestUri += '/' + TRANSCRIBE_PATH
 
-        let transcriptResult = await this.request.post(this.config.transcribe.host + '/' + this.config.transcribe.service + '/' + TRANSCRIBE_PATH, options)
+        let transcriptResult = await this.request.post(requestUri, options)
 
         msg.payload.transcript = wrapperLinstt(transcriptResult)
         return msg

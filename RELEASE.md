@@ -1,3 +1,6 @@
+# 0.0.8
+- Fix HTML balise
+
 # 0.0.7
 - Update package to new component version
 
