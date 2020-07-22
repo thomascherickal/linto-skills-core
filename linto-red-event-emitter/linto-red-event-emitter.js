@@ -30,7 +30,7 @@ function emitToSkills(msg) {
 
   if (!!msg.payload.conversationData && Object.keys(msg.payload.conversationData).length !== 0 && !!msg.payload.conversationData.intent) {
     toEmit = msg.payload.conversationData.intent
-    msg.payload.nlu = msg.payload.conversationData
+    msg.payload.nlu.intent = msg.payload.conversationData.intent
     delete msg.payload['conversationData']
     msg.payload.isConversational = true
   }

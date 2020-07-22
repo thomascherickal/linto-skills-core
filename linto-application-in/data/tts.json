@@ -1,12 +1,26 @@
 {
   "en-US": {
     "say": {
-      "auth_error": "An error occurred while attempting to connect to server"
+      "auth_error":  {
+        "phonetic": "An error occurred while attempting to connect to server",
+        "text": "An error occurred while attempting to connect to server"
+      },
+      "auth_disable":  {
+        "phonetic": "This authentification method for this process has been disable",
+        "text": "This authentification method for this process has been disable"
+      }
     }
   },
   "fr-FR": {
     "say": {
-      "auth_error": "Un problème est survenu lors de la connexion au serveur"
+      "auth_error":  {
+        "phonetic": "Un problème est survenu lors de la connexion au serveur",
+        "text": "Un problème est survenu lors de la connexion au serveur"
+      },
+      "auth_disable":  {
+        "phonetic": "Cette méthode d'authentification a été desactivé",
+        "text": "Cette méthode d'authentification a été desactivé"
+      }
     }
   }
 }

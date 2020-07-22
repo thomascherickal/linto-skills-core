@@ -11,6 +11,10 @@ const TOPIC_FILTER = 'nlp'
 const DEFAULT_TOPIC = '+'
 const LINTO_OUT_EVENT = 'linto-out'
 
+const ANDROID_BASE_TOKEN = 'Android'
+const WEB_APPLICATION_BASE_TOKEN = 'WebApplication'
+
+
 module.exports = function (RED) {
   function Node(config) {
     RED.nodes.createNode(this, config)
@@ -26,10 +30,15 @@ class LintoApplicationIn extends LintoConnectCoreNode {
 
     this.wireEvent = wireEvent.init(RED)
     this.init()
+
+    this.setFlowConfig('application_auth_type', {
+      auth_android: config.auth_android,
+      auth_web: config.auth_web
+    })
+
   }
 
   async init() {
-
     if (this.node.context().global.authServerHost !== undefined) {
       this.authToken = authToken.init(this.node.context().global.authServerHost + '/local/isAuth')
 
@@ -50,7 +59,10 @@ class LintoApplicationIn extends LintoConnectCoreNode {
   }
 }
 
+
 async function mqttHandler(topic, payload) {
+  let enable_auth = this.getFlowConfig('application_auth_type')
+
   if (topic.includes('/status')) {
     debug('message /status receive, is ignored')
     return;
@@ -59,28 +71,49 @@ async function mqttHandler(topic, payload) {
   let outTopic = data[0] + '/tolinto/' + data[2] + '/nlp/file/' + data[5]
 
   let jsonParsePayload = JSON.parse(payload)
-  let response = await this.authToken.checkToken(jsonParsePayload.auth_token)
 
-  if (response.statusCode === 200) {
-    let msg = {
-      payload: {
-        topic: outTopic,
-        audio: jsonParsePayload.audio,
-        conversationData: jsonParsePayload.conversationData
-      }
-    }
-    this.wireNode.nodeSend(this.node, msg)
+  // Check if authentification method is enable
+  if (jsonParsePayload.auth_token &&
+    ((jsonParsePayload.auth_token.split(' ')[0] === ANDROID_BASE_TOKEN && enable_auth.auth_android === false)
+      || (jsonParsePayload.auth_token.split(' ')[0] === WEB_APPLICATION_BASE_TOKEN && enable_auth.auth_web === false))) {
+    this.wireEvent.notify(`${this.node.z}-${LINTO_OUT_EVENT}`,
+      msgGeneratorError(outTopic, tts[this.getFlowConfig('language').language].say.auth_disable))
+
   } else {
-    let msg = {
-      topic: outTopic,
-      payload: {
-        say: tts[this.getFlowConfig('language').language].say.auth_error,
-        error: {
-          message: JSON.parse(response.body).message,
-          code: response.statusCode
-        }
+    try {
+      let response = await this.authToken.checkToken(jsonParsePayload.auth_token)
+      if (response.statusCode === 200) {  // Check if user token is valid
+        this.wireNode.nodeSend(this.node, {
+          payload: {
+            topic: outTopic,
+            audio: jsonParsePayload.audio,
+            conversationData: jsonParsePayload.conversationData
+          }
+        })
+      } else {  // Auth error
+        this.wireEvent.notify(`${this.node.z}-${LINTO_OUT_EVENT}`,
+          msgGeneratorError(outTopic, tts[this.getFlowConfig('language').language].say.auth_error, {
+            message: JSON.parse(response.body).message,
+            code: response.statusCode
+          }))
       }
+    } catch (err) {
+      this.wireEvent.notify(`${this.node.z}-${LINTO_OUT_EVENT}`,
+        msgGeneratorError(outTopic, tts[this.getFlowConfig('language').language].say.auth_error))
     }
-    this.wireEvent.notify(`${this.node.z}-${LINTO_OUT_EVENT}`, msg)
   }
+}
+
+function msgGeneratorError(outTopic, tts, error) {
+  let msg = {
+    topic: outTopic,
+    payload: {
+      say: tts
+    }
+  }
+
+  if (error)
+    msg.error = error
+
+  return msg
 }
