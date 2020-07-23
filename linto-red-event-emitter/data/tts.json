@@ -1,12 +1,18 @@
 {
   "en-US": {
     "say": {
-      "unknown": "I don't known what to do"
+      "unknown": {
+        "phonetic": "I don't known what to do",
+        "text": "I don't known what to do"
+      }
     }
   },
   "fr-FR": {
     "say": {
-      "unknown": "Je ne sais pas quoi faire"
+      "unknown": {
+        "phonetic": "Je ne sais pas quoi faire",
+        "text": "Je ne sais pas quoi faire"
+      }
     }
   }
 }
