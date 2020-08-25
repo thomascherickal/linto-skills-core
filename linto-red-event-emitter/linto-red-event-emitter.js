@@ -38,10 +38,9 @@ function emitToSkills(msg) {
   if (!wireEvent.isEventFlow(`${this.node.z}-${toEmit}`)) {
     toEmit = LINTO_OUT_EVENT
     msg = {
-      topic: msg.topic,
+      topic: msg.payload.topic,
       payload: { say: tts[this.getFlowConfig('language').language].say.unknown }
     }
   }
-
   wireEvent.notify(`${this.node.z}-${toEmit}`, msg)
 }
