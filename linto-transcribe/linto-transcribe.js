@@ -1,5 +1,5 @@
 const debug = require('debug')('linto:skill:v2:core:linto-transcribe')
-const LintoCoreNode = require('@linto-ai/linto-components').nodes.lintoCoreNode
+const LintoCoreEventNode = require('@linto-ai/linto-components').nodes.lintoCoreEventNode
 const { request } = require('@linto-ai/linto-components').components
 
 module.exports = function (RED) {
@@ -10,9 +10,9 @@ module.exports = function (RED) {
   RED.nodes.registerType('linto-transcribe', Node)
 }
 
-class LintoTranscribe extends LintoCoreNode {
+class LintoTranscribe extends LintoCoreEventNode {
   constructor(RED, node, config) {
-    super(node, config)
+    super(RED, node, config)
 
     this.config = {
       ...config,

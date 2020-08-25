@@ -1,9 +1,11 @@
 const debug = require('debug')(`linto:skill:v2:core:transcribe:linstt`)
 
 const TRANSCRIBE_PATH = 'transcribe'
+const tts = require('../data/tts')
 
 module.exports = async function (msg) {
   let audio = msg.payload.audio
+
   if (audio) {
     let audioBuffer = Buffer.from(audio, 'base64')
     delete msg.payload.audio
@@ -19,8 +21,10 @@ module.exports = async function (msg) {
         let transcriptResult = await this.request.post(requestUri, options)
 
         msg.payload.transcript = wrapperLinstt(transcriptResult)
+
         return msg
       } catch (err) {
+        this.notifyEventError(msg.payload.topic, tts[this.getFlowConfig('language').language].say.unknown, { message: err.message, code: 500 })
         throw new Error(err)
       }
     }
@@ -51,6 +55,11 @@ function prepareRequest(buffer) {
 
 function wrapperLinstt(transcript) {
   let text = transcript.toString('utf8')
+
+  if (text === undefined || text.length === 0) {
+    throw new Error('Transcription was empty')
+  }
+
   return {
     text: text,
     confidence: 0
