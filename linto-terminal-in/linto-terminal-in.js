@@ -42,8 +42,8 @@ function mqttHandler(topic, payload) {
   let jsonParsePayload = JSON.parse(payload)
 
   let msg = {
-    topic: outTopic,
     payload: {
+      topic: outTopic,
       audio: jsonParsePayload.audio,
       conversationData: jsonParsePayload.conversationData
     }

@@ -134,7 +134,7 @@ function extractCommandData(tock, cmd) {
   return {
     intent: `${tock.namespace}:${cmdMetadata[1]}`,
     language: cmdMetadata[2],
-    status: 'inbox',
+    status: 'model',
     entities: [],
     text: ''
   }
