@@ -14,7 +14,7 @@ module.exports = async function (msg) {
 
       try {
         let requestUri = this.config.transcribe.host
-        if (this.config.transcribe.service !== undefined) {
+        if (this.config.transcribe.service !== undefined && this.config.transcribe.service !== '') {
           requestUri += '/' + this.config.transcribe.service
           //TODO: Workaround
           requestUri = 'http://' + this.config.transcribe.service + ':2000'
