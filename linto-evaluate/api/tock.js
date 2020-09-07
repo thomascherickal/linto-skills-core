@@ -5,7 +5,7 @@ const tts = require('../data/tts')
 module.exports = async function (msg) {
   try {
     let options = prepareRequest.call(this, msg)
-    let requestResult = await this.request.post(this.config.evaluate.host + '/rest/nlp/parse', options)
+    let requestResult = await this.request.post('http://' + this.config.evaluate.host + '/rest/nlp/parse', options)
     let wrappedNlu = wrapperTock(requestResult)
     msg.payload.nlu = wrappedNlu
 
