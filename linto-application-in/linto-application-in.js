@@ -40,7 +40,7 @@ class LintoApplicationIn extends LintoConnectCoreNode {
 
   async init() {
     if (this.node.context().global.authServerHost !== undefined) {
-      this.authToken = authToken.init(this.node.context().global.authServerHost + '/local/isAuth')
+      this.authToken = authToken.init('http://' + this.node.context().global.authServerHost + '/local/isAuth')
 
       let mqttConfig = this.getFlowConfig('confMqtt')
       if (mqttConfig) {
