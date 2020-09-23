@@ -1,3 +1,9 @@
+# 0.0.10
+- Fix tts phonetic or text
+
+# 0.0.9
+- Added auth methodologie for flow
+
 # 0.0.8
 - Fix HTML balise
 

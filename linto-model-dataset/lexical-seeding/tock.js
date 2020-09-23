@@ -8,6 +8,7 @@ const DUCKLING_PREFIX = 'duckling'
 
 const BACKLINE_SEPARATOR = '\n'
 const COMMAND_DELIMITER = '- '
+const DASH_FILTER = '-'
 const INTENT_METADATA_SEPARATOR = '##intent'
 const COMMAND_METADATA_SEPARATOR = '|'
 const ENTITY_METADATA_SEPARATOR = ']('
@@ -29,7 +30,7 @@ module.exports = (skills, dictionaries, tock, flowLanguage) => {
   let application = {
     applicationName: `${tock.namespace}:${tock.applicationName}`,
     sentences: [],
-    errors : []
+    errors: []
   }
 
   skills.map(skill => {
@@ -48,10 +49,16 @@ module.exports = (skills, dictionaries, tock, flowLanguage) => {
     skill.command.split(BACKLINE_SEPARATOR).map(cmd => {
       cmd = cmd.toLowerCase()
       cmd = cmd.replace(COMMAND_DELIMITER, '')
+        .replace(DASH_FILTER, ' ')
+        .replace(/ +/g, ' ')
+        .replace(/æ/g, 'ae')
+        .replace(/œ/g, 'oe')
+        .replace(/’/g, '\'')
+        .replace(/ʼ/g, '\'')
 
       if (cmd.indexOf(INTENT_METADATA_SEPARATOR) > -1) {
         intentModel = extractCommandData(tock, cmd) // get generic template from intent
-      } else {
+      } else if (cmd !== '') {
         let intent = Object.assign({}, intentModel)
         intent.text = cmd
 
@@ -60,7 +67,7 @@ module.exports = (skills, dictionaries, tock, flowLanguage) => {
         } else if (cmd.indexOf(DICTIONARY_COMMAND_ENTITY_SEPARATOR) > -1) {
           intent = generateDictionaryEntity(intent, tock, wiredEntity) // extract entity from dictionary
         }
-        
+
         if (intent && (intent.language === flowLanguage.language || intent.language === flowLanguage.lang)) {
           isValidCmd(intent.text) ? application.sentences.push(intent) : application.errors.push(intent)
         }
@@ -80,8 +87,9 @@ function generateDictionaryEntity(intent, tock, entities) {
 
   while (match = REGEX_STT_ENTITY.exec(intent.text)) {
     let entity = match[0].substr(1)
-    let entityCmd = entities[intent.language][entity]
-    if (entityCmd) {
+
+    if (entities && entities[intent.language]) {
+      let entityCmd = entities[intent.language][entity]
       let randomSample = _.sample(entityCmd)
       line = line.replace(match[0], randomSample)
       intent.entities.push({
@@ -101,8 +109,6 @@ function generateDictionaryEntity(intent, tock, entities) {
   intent.text = line
   return intent
 }
-
-
 
 function generateDefinedDataEntity(intent, tock) {
   intent.entities = []
@@ -134,7 +140,7 @@ function extractCommandData(tock, cmd) {
   return {
     intent: `${tock.namespace}:${cmdMetadata[1]}`,
     language: cmdMetadata[2],
-    status: 'inbox',
+    status: 'model',
     entities: [],
     text: ''
   }

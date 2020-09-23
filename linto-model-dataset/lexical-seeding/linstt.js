@@ -6,6 +6,7 @@ const REGEX_STT_ENTITY = new RegExp('#\\S*', 'gm')
 
 const BACKLINE_SEPARATOR = '\n'
 const COMMAND_DELIMITER = '- '
+const DASH_FILTER = '-'
 const INTENT_METADATA_SEPARATOR = '##intent'
 const COMMAND_METADATA_SEPARATOR = '|'
 const ENTITY_METADATA_SEPARATOR = ']('
@@ -59,8 +60,8 @@ module.exports = (skills, dictionaries, flowLanguage) => {
     let intent, intentError
     skill.command.split(BACKLINE_SEPARATOR).map(cmd => {
       cmd = cmd.toLowerCase()
-      if (cmd.indexOf(INTENT_METADATA_SEPARATOR) > -1) {
 
+      if (cmd.indexOf(INTENT_METADATA_SEPARATOR) > -1) {
         if (intent && (intent.lang === flowLanguage.language || intent.lang === flowLanguage.lang)) {
           seed.data.intents.push(intent) //add fullintent
           intentError.items.length !== 0 ? seed.errors.intents.push(intentError) : undefined
@@ -72,7 +73,14 @@ module.exports = (skills, dictionaries, flowLanguage) => {
         if (!seed)
           seed = { lang: flowLanguage.language, data: { intents: [], entities: [] }, errors: { intents: [], entities: [] } }
       } else if (cmd !== '') {
-        let line = cmd.replace(COMMAND_DELIMITER, '')
+        let line = cmd
+          .replace(COMMAND_DELIMITER, '')
+          .replace(DASH_FILTER, ' ')
+          .replace(/ +/g, ' ')
+          .replace(/æ/g, 'ae')
+          .replace(/œ/g, 'oe')
+          .replace(/’/g, '\'')
+          .replace(/ʼ/g, '\'')
 
         if (!line.indexOf(COMMAND_METADATA_SEEDING)) {
           line = manageUndefinedDictionary(line, dictionaries)

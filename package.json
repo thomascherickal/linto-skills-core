@@ -1,6 +1,6 @@
 {
   "name": "@linto-ai/node-red-linto-core",
-  "version": "0.0.8",
+  "version": "0.0.13-2",
   "description": "Recommanded skills to be used by LinTO",
   "scripts": {
     "test": "mocha test",
@@ -42,7 +42,7 @@
     }
   },
   "dependencies": {
-    "@linto-ai/linto-components": "^0.0.5",
+    "@linto-ai/linto-components": "latest",
     "debug": "^4.0.1",
     "lodash": "^4.17.15"
   },

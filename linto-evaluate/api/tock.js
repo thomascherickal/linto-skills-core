@@ -1,11 +1,19 @@
 const debug = require('debug')(`linto:skill:v2:core:evaluate:tock`)
 
+const tts = require('../data/tts')
+
 module.exports = async function (msg) {
-  let options = prepareRequest.call(this, msg)
-  let requestResult = await this.request.post(this.config.evaluate.host, options)
-  let wrappedNlu = wrapperTock(requestResult)
-  msg.payload.nlu = wrappedNlu
-  return msg
+  try {
+    let options = prepareRequest.call(this, msg)
+    let requestResult = await this.request.post('http://' + this.config.evaluate.host + '/rest/nlp/parse', options)
+    let wrappedNlu = wrapperTock(requestResult)
+    msg.payload.nlu = wrappedNlu
+
+    return msg
+  } catch (err) {
+    this.notifyEventError(msg.payload.topic, tts[this.getFlowConfig('language').language].say.unknown, { message: err.message, code: 500 })
+    throw new Error(err)
+  }
 }
 
 function prepareRequest(msg) {

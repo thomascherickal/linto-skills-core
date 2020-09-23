@@ -42,7 +42,7 @@ class LintoTerminalOut extends LintoConnectCoreNode {
 
 function toLintoByEvent(msg) {
   if (msg.topic === undefined || msg.topic === '') {
-    this.sendStatus('yellow', 'ring', 'Error during skill processing')
+    this.sendStatus('yellow', 'ring', 'Unknown topic')
   } else {
     let output = { behavior: {} }
     output.behavior = msg.payload
