@@ -3,11 +3,13 @@
     "label": {
       "host": "Host",
       "api": "API",
-      "service" : "Service"
+      "service" : "Service",
+      "streaming" : "Streaming"
     },
     "placeholder": {
       "host": "http://",
-      "service" : "Service Name"
+      "service" : "Service Name",
+      "streaming" : "http://"
     },
     "shared": {
       "list_api": {

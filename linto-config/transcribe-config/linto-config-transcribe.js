@@ -9,6 +9,7 @@ module.exports = function (RED) {
       host: n.host,
       service: n.service,
       api: n.api,
+      streaming : n.streaming
     }
   }
   RED.nodes.registerType("linto-config-transcribe", LintoConfigTranscribe)
