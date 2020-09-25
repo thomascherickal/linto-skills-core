@@ -14,15 +14,12 @@ module.exports = async function (msg) {
 
       try {
         let requestUri = this.config.transcribe.host
-        if (this.config.transcribe.service !== undefined && this.config.transcribe.service !== '') {
-          requestUri += '/' + this.config.transcribe.service
-          //TODO: Workaround
-          requestUri = 'http://' + this.config.transcribe.service + ':2000'
-        }
-        requestUri += '/' + TRANSCRIBE_PATH
+
+        if (this.config.transcribe.commandOffline !== undefined && this.config.transcribe.commandOffline !== '') {
+          requestUri = 'http://' + this.config.transcribe.commandOffline + '/' + TRANSCRIBE_PATH
+        } else throw new Error('Configuration missing')
 
         let transcriptResult = await this.request.post(requestUri, options)
-
         msg.payload.transcript = wrapperLinstt(transcriptResult)
 
         return msg

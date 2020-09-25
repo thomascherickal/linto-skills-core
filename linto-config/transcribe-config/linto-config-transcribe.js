@@ -6,10 +6,11 @@ module.exports = function (RED) {
     this.host = n.host
     this.api = n.api
     this.config = {
-      host: n.host,
-      service: n.service,
+      host: process.env.LINTO_STACK_STT_SERVICE_MANAGER_SERVICE,
       api: n.api,
-      streaming : n.streaming
+      commandOffline: n.commandOffline,
+      largeVocabStreaming: n.largeVocabStreaming,
+      largeVocabOffline : n.largeVocabOffline
     }
   }
   RED.nodes.registerType("linto-config-transcribe", LintoConfigTranscribe)

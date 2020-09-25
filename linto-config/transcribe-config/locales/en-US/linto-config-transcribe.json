@@ -1,15 +1,16 @@
 {
   "linto-config-transcribe": {
     "label": {
-      "host": "Host",
       "api": "API",
-      "service" : "Service",
-      "streaming" : "Streaming"
+      "commandOffline" : "Command",
+      "largeVocabStreaming" : "Streaming",
+      "largeVocabOffline" : "Offline large"
     },
     "placeholder": {
-      "host": "http://",
       "service" : "Service Name",
-      "streaming" : "http://"
+      "commandOffline" : "http://command_offline_service",
+      "largeVocabStreaming" : "http://large_vocabulary_streaming_service",
+      "largeVocabOffline" : "http://large_vocabulary_offline_service/"
     },
     "shared": {
       "list_api": {
