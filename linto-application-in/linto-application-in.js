@@ -6,7 +6,7 @@ const { wireEvent } = require('@linto-ai/linto-components').components
 const tts = require('./data/tts')
 
 const TOPIC_SUBSCRIBE = '#'
-const TOPIC_FILTER = 'nlp'
+const TOPIC_FILTER = ['nlp', 'lvcsrstreaming', 'action']
 
 const DEFAULT_TOPIC = '+'
 const LINTO_OUT_EVENT = 'linto-out'
@@ -49,43 +49,38 @@ class LintoApplicationIn extends LintoConnectCoreNode {
         this.mqtt.onMessage(mqttHandler.bind(this), TOPIC_FILTER)
 
         await this.configure()
-      } else {
-        this.sendStatus('yellow', 'ring', 'Configuration is missing')
-      }
+      } else this.sendStatus('yellow', 'ring', 'Configuration is missing')
 
-    } else {
-      this.sendStatus('red', 'ring', 'Authentification server not setup')
-    }
+    } else this.sendStatus('red', 'ring', 'Authentification server not setup')
   }
 }
 
 
 async function mqttHandler(topic, payload) {
   let enable_auth = this.getFlowConfig('application_auth_type')
+  const [_clientCode, _channel, _sn, _etat, _type, _id] = topic.split('/')
 
-  if (topic.includes('/status')) {
+  if (_etat) {
     debug('message /status receive, is ignored')
     return;
   }
-  let data = topic.split('/')
-  let outTopic = data[0] + '/tolinto/' + data[2] + '/nlp/file/' + data[5]
 
-  let jsonParsePayload = JSON.parse(payload)
-
+  const outTopic = data[0] + '/tolinto/' + data[2] + '/nlp/file/' + data[5]
+  const jsonParsePayload = JSON.parse(payload)
+  
   // Check if authentification method is enable
   if (jsonParsePayload.auth_token &&
     ((jsonParsePayload.auth_token.split(' ')[0] === ANDROID_BASE_TOKEN && enable_auth.auth_android === false)
       || (jsonParsePayload.auth_token.split(' ')[0] === WEB_APPLICATION_BASE_TOKEN && enable_auth.auth_web === false))) {
     this.wireEvent.notify(`${this.node.z}-${LINTO_OUT_EVENT}`,
       msgGeneratorError(outTopic, tts[this.getFlowConfig('language').language].say.auth_disable))
-
   } else {
     try {
       let response = await this.authToken.checkToken(jsonParsePayload.auth_token)
       if (response.statusCode === 200) {  // Check if user token is valid
         this.wireNode.nodeSend(this.node, {
           payload: {
-            topic: outTopic,
+            topic,
             audio: jsonParsePayload.audio,
             conversationData: jsonParsePayload.conversationData
           }
@@ -112,8 +107,6 @@ function msgGeneratorError(outTopic, tts, error) {
     }
   }
 
-  if (error)
-    msg.error = error
-
+  if (error) msg.error = error
   return msg
 }

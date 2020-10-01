@@ -3,7 +3,7 @@ const LintoConnectCoreNode = require('@linto-ai/linto-components').nodes.lintoCo
 const { mqtt } = require('@linto-ai/linto-components').connect
 
 const TOPIC_SUBSCRIBE = '#'
-const TOPIC_FILTER = 'nlp'
+const TOPIC_FILTER = ['nlp', 'lvcsrstreaming', 'action']
 
 module.exports = function (RED) {
   function Node(config) {
@@ -29,21 +29,16 @@ class LintoTerminalIn extends LintoConnectCoreNode {
       this.cleanStatus()
 
       await this.configure()
-    } else {
-      this.sendStatus('yellow', 'ring', 'Configuration is missing')
-    }
+    } else this.sendStatus('yellow', 'ring', 'Configuration is missing')
   }
 }
 
 function mqttHandler(topic, payload) {
-  let data = topic.split('/')
-  let outTopic = data[0] + '/tolinto/' + data[2] + '/nlp/file/' + data[5]
-
   let jsonParsePayload = JSON.parse(payload)
 
   let msg = {
     payload: {
-      topic: outTopic,
+      topic,
       audio: jsonParsePayload.audio,
       conversationData: jsonParsePayload.conversationData
     }

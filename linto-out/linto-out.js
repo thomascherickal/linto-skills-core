@@ -45,7 +45,9 @@ function toLintoByEvent(msg) {
     this.sendStatus('yellow', 'ring', 'Unknown topic')
   } else {
     let output = { behavior: {} }
+
     output.behavior = msg.payload
+    output.transcript = msg.transcript
 
     this.mqtt.publish(msg.topic, JSON.stringify(output))
     this.sendStatus('green', 'ring', NODE_SUCCES_MESSAGE)
