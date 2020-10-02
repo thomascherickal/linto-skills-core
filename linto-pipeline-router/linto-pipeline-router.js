@@ -30,13 +30,14 @@ class LintoPipelineRouter extends LintoCoreEventNode {
 
 function routerOutputManager(msg) {
   const [_clientCode, _channel, _sn, _etat, _type, _id] = msg.payload.topic.split('/')
-  msg.payload.topic = `${_clientCode}/tolinto/${_sn}/${_etat}/${_type}/${_id}`
+  msg.payload.topic = `${_clientCode}/tolinto/${_sn}/${_etat}/${_type}`
 
   switch (_etat) {
     case 'nlp':
+      msg.payload.topic += '/' + _id
       checkNodeAndSendMsg.call(this, 'linto-transcribe', [msg, null, null], 0)
       break
-    case 'lvcsrstreaming':
+    case 'streaming':
       checkNodeAndSendMsg.call(this, 'linto-transcribe-streaming', [null, msg, null], 1)
       break
     case 'action':

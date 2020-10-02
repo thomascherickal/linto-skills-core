@@ -1,6 +1,6 @@
 {
   "name": "@linto-ai/node-red-linto-core",
-  "version": "0.0.13-2",
+  "version": "0.0.13-8",
   "description": "Recommanded skills to be used by LinTO",
   "scripts": {
     "test": "mocha test",
@@ -33,9 +33,11 @@
       "linto-model-dataset": "linto-model-dataset/linto-model-dataset.js",
       "linto-on-connect": "linto-on-connect/linto-on-connect.js",
       "linto-out": "linto-out/linto-out.js",
+      "linto-pipeline-router": "linto-pipeline-router/linto-pipeline-router.js",
       "linto-red-event-emiter": "linto-red-event-emitter/linto-red-event-emitter.js",
       "linto-terminal-in": "linto-terminal-in/linto-terminal-in.js",
       "linto-transcribe": "linto-transcribe/linto-transcribe.js",
+      "linto-transcribe-streaming": "linto-transcribe-streaming/linto-transcribe-streaming.js",
       "linto-ui": "linto-ui/linto-ui.js",
       "linto-to-ui": "linto-ui/to-linto-ui.js",
       "linto-tts": "linto-tts/linto-tts.js"
@@ -44,7 +46,8 @@
   "dependencies": {
     "@linto-ai/linto-components": "latest",
     "debug": "^4.0.1",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "ws": "^7.3.1"
   },
   "homepage": "https://linto.ai/",
   "directories": {
