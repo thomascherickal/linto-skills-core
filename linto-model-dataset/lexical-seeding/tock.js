@@ -27,6 +27,7 @@ let isValidCmd = (cmd) => {
 
 module.exports = (skills, dictionaries, tock, flowLanguage) => {
   let entities = generateEntities(dictionaries)
+
   let application = {
     applicationName: `${tock.namespace}:${tock.applicationName}`,
     sentences: [],
@@ -37,9 +38,9 @@ module.exports = (skills, dictionaries, tock, flowLanguage) => {
     let intentModel
     let wiredEntity = {}
     for (let entity in entities) {
-      wiredEntity[entity] = {}
       for (let dictionaryId in entities[entity]) {
         if (skill.wires[0].includes(dictionaryId)) {
+          wiredEntity[entity] = {}
           let wiredNode = entities[entity][dictionaryId]
           wiredEntity[entity][wiredNode.name] = wiredNode.cmd
         }
