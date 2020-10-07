@@ -40,12 +40,15 @@ module.exports = (skills, dictionaries, tock, flowLanguage) => {
     for (let entity in entities) {
       for (let dictionaryId in entities[entity]) {
         if (skill.wires[0].includes(dictionaryId)) {
-          wiredEntity[entity] = {}
+          if (wiredEntity[entity] === undefined)
+            wiredEntity[entity] = {}
           let wiredNode = entities[entity][dictionaryId]
           wiredEntity[entity][wiredNode.name] = wiredNode.cmd
         }
       }
     }
+
+    debug(wiredEntity)
 
     skill.command.split(BACKLINE_SEPARATOR).map(cmd => {
       cmd = cmd.toLowerCase()
@@ -85,11 +88,10 @@ function generateDictionaryEntity(intent, tock, entities) {
   let isDefined = true
   let line = intent.text
   intent.entities = []
-
   while (match = REGEX_STT_ENTITY.exec(intent.text)) {
     let entity = match[0].substr(1)
-
-    if (entities && entities[intent.language]) {
+    debug(entity)
+    if (entities && entities[intent.language] && entities[intent.language][entity]) {
       let entityCmd = entities[intent.language][entity]
       let randomSample = _.sample(entityCmd)
       line = line.replace(match[0], randomSample)
