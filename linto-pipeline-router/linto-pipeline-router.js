@@ -54,5 +54,5 @@ function checkNodeAndSendMsg(searchedNode, msg, msgIndex) {
   let nextNode = redAction.findNodeType.call(this.RED, this.node.z, searchedNode)
   if (nextNode && this.node.wires[msgIndex].find(id => nextNode.id === id))
     this.wireNode.nodeSend(this.node, msg)
-  else this.sendPayloadToLinTO(msg.payload.topic, { streaming: { status: "error", message: error.missingStreamingSkill } })
+  else this.sendPayloadToLinTO(msg.payload.topic, { error: { status: "error", message: error.unsuportedSkill } })
 }

@@ -6,5 +6,9 @@
   "unsuportedTopic" : {
     "message" : "Unsuported topic",
     "code" : 500
+  },
+  "unsuportedSkill" : {
+    "message" : "The flow don't have the require skill",
+    "code" : 500
   }
 }
