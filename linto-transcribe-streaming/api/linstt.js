@@ -44,7 +44,6 @@ function startWS(host, id, topic, msg) {
     const topicStop = this.linto_topic + '/stop'
 
     let data = JSON.parse(msg)
-    console.log(data)
     if ('partial' in data) this.skillLinto.sendPayloadToLinTO(topicChunk, { streaming: { partial: data.partial } })
     else if ('text' in data && !('words' in data)) this.skillLinto.sendPayloadToLinTO(topicChunk, { streaming: { text: data.text } })
     else if ('words' in data) this.skillLinto.sendPayloadToLinTO(topicStop, { streaming: { "status": "stop", result: JSON.stringify(data, null, 4) } })
