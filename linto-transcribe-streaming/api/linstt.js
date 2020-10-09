@@ -12,11 +12,11 @@ module.exports = async function (msg) {
   switch (_type) {
     case 'start':
       startWS.call(this, largeVocabStreaming, _sn, topic, msg)
-      this.sendPayloadToLinTO(topic+ '/start', { streaming: { status: 'started' } })
+      this.sendPayloadToLinTO(topic + '/start', { streaming: { status: 'started' } })
       break
     case 'stop':
       stopWS(_sn)
-      this.sendPayloadToLinTO(topic+ '/stop', { streaming: { status: 'stoped' } })
+      this.sendPayloadToLinTO(topic + '/stop', { streaming: { status: 'stop' } })
       break
     case 'chunk':
       onMessage(msg.payload.chunk, _sn)
@@ -41,12 +41,12 @@ function startWS(host, id, topic, msg) {
 
   websocket[id].on('message', function incoming(msg) {
     const topicChunk = this.linto_topic + '/chunk'
-    const topicStop = this.linto_topic + '/stop'
+    const topicFinal = this.linto_topic + '/final'
 
     let data = JSON.parse(msg)
-    if ('partial' in data) this.skillLinto.sendPayloadToLinTO(topicChunk, { streaming: { partial: data.partial } })
+    if ('partial' in data) this.skillLinto.sendPayloadToLinTO(topicChunk, { streaming: { partial: data.partial } }, 0)
     else if ('text' in data && !('words' in data)) this.skillLinto.sendPayloadToLinTO(topicChunk, { streaming: { text: data.text } })
-    else if ('words' in data) this.skillLinto.sendPayloadToLinTO(topicStop, { streaming: { "status": "stop", result: JSON.stringify(data, null, 4) } })
+    else if ('words' in data) this.skillLinto.sendPayloadToLinTO(topicFinal, { streaming: { "status": "final", result: JSON.stringify(data, null, 4) } })
     else if ('eod' in data) this.close()
     else console.error("unsupported msg", data)
   })
