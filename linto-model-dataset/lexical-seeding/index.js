@@ -1,7 +1,7 @@
 const debug = require('debug')('linto:skill:v2:core:linto-model-dataset:lexical-seeding')
 
-const linsttParser = require('./linstt/worker_threads')
-const tockParser = require('./tock/worker_threads')
+const linsttParser = require('./linstt/linstt')
+const tockParser = require('./tock/tock')
 
 module.exports = {
   linstt: linsttParser,

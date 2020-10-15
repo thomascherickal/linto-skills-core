@@ -1,3 +1,5 @@
+const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
+
 const debug = require('debug')('linto:skill:v2:core:linto-model-dataset:lexical-seeding:linstt')
 const _ = require('lodash')
 
@@ -15,91 +17,109 @@ const DICTIONARY_LANGUAGE_SEPARATOR = '##'
 const COMMAND_METADATA_SEEDING = '#'
 const COMMAND_REGEX = /[^#a-zàâäçèéêëîïôùûü\-\' ]/g
 
-let isValidCmd = (cmd) => {
-  if (COMMAND_REGEX.exec(cmd))
-    return false
+const isValidCmd = (cmd) => {
+  if (COMMAND_REGEX.exec(cmd)) return false
   return true
 }
 
-module.exports = (skills, dictionaries, flowLanguage) => {
-
-  dictionaries = checkWiredDictionaries(skills, dictionaries)
-
-  let seed
-  dictionaries.map(dictionary => {
-    let entity, entityError
-
-    dictionary.data.split(BACKLINE_SEPARATOR).map(cmd => {
-      cmd = cmd.toLowerCase()
-      if (cmd.indexOf(DICTIONARY_LANGUAGE_SEPARATOR) > -1) {
-        if (entity && (entity.lang === flowLanguage.language || entity.lang === flowLanguage.lang)) {
-          seed.data.entities.push(entity)
-          entityError.items.length !== 0 ? seed.errors.entities.push(entityError) : undefined
-        }
-
-        entity = extractEntityData(dictionary, cmd)
-        entityError = _.cloneDeep(entity)
-
-        if (!seed)
-          seed = { lang: flowLanguage.language, data: { intents: [], entities: [] }, errors: { intents: [], entities: [] } }
-
-      } else if (cmd !== '' && entity !== undefined && entity.items.indexOf(cmd) === -1) {
-        isValidCmd(cmd) ? entity.items.push(cmd) : entityError.items.push(cmd)
-      }
-    })
-
-    if (entity && (entity.lang === flowLanguage.language || entity.lang === flowLanguage.lang)) {
-      seed.data.entities.push(entity)  // add last full entity
-      entityError.items.length !== 0 ? seed.errors.entities.push(entityError) : undefined
-    }
-  })
-
-  skills.map(skill => {
-    let intent, intentError
-    skill.command.split(BACKLINE_SEPARATOR).map(cmd => {
-      cmd = cmd.toLowerCase()
-
-      if (cmd.indexOf(INTENT_METADATA_SEPARATOR) > -1) {
-        if (intent && (intent.lang === flowLanguage.language || intent.lang === flowLanguage.lang)) {
-          seed.data.intents.push(intent) //add fullintent
-          intentError.items.length !== 0 ? seed.errors.intents.push(intentError) : undefined
-        }
-
-        intent = extractCommandData(cmd)
-        intentError = _.cloneDeep(intent)
-
-        if (!seed)
-          seed = { lang: flowLanguage.language, data: { intents: [], entities: [] }, errors: { intents: [], entities: [] } }
-      } else if (cmd !== '') {
-        let line = cmd
-          .replace(COMMAND_DELIMITER, '')
-          .replace(DASH_FILTER, ' ')
-          .replace(/ +/g, ' ')
-          .replace(/æ/g, 'ae')
-          .replace(/œ/g, 'oe')
-          .replace(/’/g, '\'')
-          .replace(/ʼ/g, '\'')
-
-        if (!line.indexOf(COMMAND_METADATA_SEEDING)) {
-          line = manageUndefinedDictionary(line, dictionaries)
-        }
-
-        if (cmd.indexOf(ENTITY_METADATA_SEPARATOR) > -1) {
-          line = exctractDefinedEntity.call(seed, line, intent.lang, flowLanguage.lang) //extract and manage intent and entity
-        }
-
-        if (line && intent.items.indexOf(line) === -1) {
-          isValidCmd(line) ? intent.items.push(line) : intentError.items.push(line)
-        }
-      }
-    })
-    if (intent && (intent.lang === flowLanguage.language || intent.lang === flowLanguage.lang)) {
-      seed.data.intents.push(intent) // add last full intent
-      intentError.items.length !== 0 ? seed.errors.intents.push(intentError) : undefined
-    }
-  })
-  return seed
+const isValidTest = (cmd) => {
+  return true
 }
+
+if (isMainThread) {
+  module.exports = function parseJSAsync(skills, dictionaries, flowLanguage) {
+
+    return new Promise((resolve, reject) => {
+      const worker = new Worker(__filename, {
+        workerData: {
+          skills: skills,
+          dictionaries: dictionaries,
+          flowLanguage: flowLanguage
+        }
+      })
+      worker.on('message', (message) => {
+        resolve(message)
+      })
+      worker.on('error', reject)
+      worker.on('exit', (code) => {
+        if (code !== 0)
+          reject(new Error(`Worker stopped with exit code ${code}`))
+      })
+      worker.postMessage('') // send message to worker
+    })
+  }
+} else {
+
+  parentPort.once('message', (message) => {
+    let skills = workerData.skills
+    let dictionaries = workerData.dictionaries
+    let flowLanguage = workerData.flowLanguage
+
+    dictionaries = checkWiredDictionaries(skills, dictionaries)
+
+    let seed = { lang: flowLanguage.language, data: { intents: [], entities: [] }, errors: { intents: [], entities: [] } }
+    dictionaries.map(dictionary => {
+      let entity = {
+        name: dictionary.name,
+        items: [],
+        entity: dictionary.name
+      }
+      dictionary.data.toLowerCase().split(BACKLINE_SEPARATOR).map(cmd => {
+        if (cmd.indexOf(DICTIONARY_LANGUAGE_SEPARATOR) > -1) {
+          entity.lang = cmd.slice(DICTIONARY_LANGUAGE_SEPARATOR.length, cmd.length)
+        } else { entity.items.push(cmd) }
+      })
+      seed.data.entities.push(entity)
+    })
+
+    skills.map(skill => {
+      let intent, intentError
+      skill.command.split(BACKLINE_SEPARATOR).map(cmd => {
+        cmd = cmd.toLowerCase()
+
+        if (cmd.indexOf(INTENT_METADATA_SEPARATOR) > -1 && cmd.indexOf(flowLanguage.lang) > -1) {
+          if (intent && (intent.lang === flowLanguage.language || intent.lang === flowLanguage.lang)) {
+            seed.data.intents.push(intent) //add fullintent
+            intentError.items.length !== 0 ? seed.errors.intents.push(intentError) : undefined
+          }
+
+          intent = extractCommandData(cmd)
+          intentError = _.cloneDeep(intent)
+
+          if (!seed)
+            seed = { lang: flowLanguage.language, data: { intents: [], entities: [] }, errors: { intents: [], entities: [] } }
+        } else if (cmd !== '') {
+          let line = cmd
+            .replace(COMMAND_DELIMITER, '')
+            .replace(DASH_FILTER, ' ')
+            .replace(/ +/g, ' ')
+            .replace(/æ/g, 'ae')
+            .replace(/œ/g, 'oe')
+            .replace(/’/g, '\'')
+            .replace(/ʼ/g, '\'')
+
+          if (!line.indexOf(COMMAND_METADATA_SEEDING)) {
+            line = manageUndefinedDictionary(line, dictionaries)
+          }
+
+          if (cmd.indexOf(ENTITY_METADATA_SEPARATOR) > -1) {
+            line = exctractDefinedEntity.call(seed, line, intent.lang, flowLanguage.lang) //extract and manage intent and entity
+          }
+
+          if (line && intent.items.indexOf(line) === -1) {
+            isValidCmd(line) ? intent.items.push(line) : intentError.items.push(line)
+          }
+        }
+      })
+      if (intent && (intent.lang === flowLanguage.language || intent.lang === flowLanguage.lang)) {
+        seed.data.intents.push(intent) // add last full intent
+        intentError.items.length !== 0 ? seed.errors.intents.push(intentError) : undefined
+      }
+    })
+    parentPort.postMessage(seed)
+  })
+}
+
 
 function checkWiredDictionaries(skills, dictionaries) {
   let dictionariesWired = []
@@ -114,29 +134,16 @@ function checkWiredDictionaries(skills, dictionaries) {
 }
 
 function manageUndefinedDictionary(line, dictionaries) {
-  let match = undefined
+  let match
   while (match = REGEX_STT_ENTITY.exec(line)) {
     let isDefined = false
     dictionaries.map(dictionary => {
-      if (COMMAND_METADATA_SEEDING + dictionary.name === match[0]) {
-        isDefined = true
-      }
+      if (COMMAND_METADATA_SEEDING + dictionary.name === match[0]) isDefined = true
     })
-    if (!isDefined)
-      return undefined
+    if (!isDefined) return undefined
   }
 
   return line
-}
-
-function extractEntityData(dictionary, cmd) {
-  let lang = cmd.slice(DICTIONARY_LANGUAGE_SEPARATOR.length, cmd.length)
-  return {
-    name: dictionary.name,
-    items: [],
-    entity: dictionary.name,
-    lang
-  }
 }
 
 function extractCommandData(cmd) {
