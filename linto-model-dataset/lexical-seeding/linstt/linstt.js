@@ -77,17 +77,18 @@ if (isMainThread) {
       skill.command.split(BACKLINE_SEPARATOR).map(cmd => {
         cmd = cmd.toLowerCase()
 
-        if (cmd.indexOf(INTENT_METADATA_SEPARATOR) > -1 && cmd.indexOf(flowLanguage.lang) > -1) {
+        if (cmd.indexOf(INTENT_METADATA_SEPARATOR) > -1) {
           if (intent && (intent.lang === flowLanguage.language || intent.lang === flowLanguage.lang)) {
             seed.data.intents.push(intent) //add fullintent
             intentError.items.length !== 0 ? seed.errors.intents.push(intentError) : undefined
           }
 
-          intent = extractCommandData(cmd)
-          intentError = _.cloneDeep(intent)
-
-          if (!seed)
-            seed = { lang: flowLanguage.language, data: { intents: [], entities: [] }, errors: { intents: [], entities: [] } }
+          if (cmd.indexOf(flowLanguage.lang) > -1) {
+            intent = extractCommandData(cmd)
+            intentError = _.cloneDeep(intent)
+          } else {
+            intent = undefined  // Skip undefined flow language
+          }
         } else if (intent && cmd !== '') {
           let line = cmd
             .replace(COMMAND_DELIMITER, '')
@@ -105,7 +106,6 @@ if (isMainThread) {
           if (cmd.indexOf(ENTITY_METADATA_SEPARATOR) > -1) {
             line = exctractDefinedEntity.call(seed, line, intent.lang, flowLanguage.lang) //extract and manage intent and entity
           }
-
           if (line && intent.items.indexOf(line) === -1) {
             isValidCmd(line) ? intent.items.push(line) : intentError.items.push(line)
           }
