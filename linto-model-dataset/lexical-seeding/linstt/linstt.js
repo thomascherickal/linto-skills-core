@@ -88,7 +88,7 @@ if (isMainThread) {
 
           if (!seed)
             seed = { lang: flowLanguage.language, data: { intents: [], entities: [] }, errors: { intents: [], entities: [] } }
-        } else if (cmd !== '') {
+        } else if (intent && cmd !== '') {
           let line = cmd
             .replace(COMMAND_DELIMITER, '')
             .replace(DASH_FILTER, ' ')
